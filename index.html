@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>KCOM DZS ONT Engineer Training</title>
+<title>JB · DZS ONT Engineer Training</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
 :root {
@@ -22,8 +22,8 @@ html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:15px;line-height:1.5;padding-bottom:calc(var(--nav-h) + 8px);}
 
 /* HEADER */
-.app-header{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--header-h);background:rgba(9,13,24,0.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);display:flex;align-items:center;gap:10px;padding:0 16px;}
-.header-badge{background:var(--accent);color:#001a3a;font-weight:800;font-size:13px;padding:3px 10px;border-radius:4px;letter-spacing:2px;flex-shrink:0;}
+.app-header{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--header-h);background:rgba(9,13,24,0.98);border-bottom:1px solid rgba(0,119,255,0.3);backdrop-filter:blur(16px);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 1px 20px rgba(0,119,255,0.1);}
+.header-badge{background:linear-gradient(135deg,#0055cc,#0077ff);color:#fff;font-weight:900;font-size:15px;padding:5px 14px;border-radius:6px;letter-spacing:3px;flex-shrink:0;box-shadow:0 2px 12px rgba(0,119,255,0.45);}
 .header-title{font-size:14px;font-weight:600;color:var(--text);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .header-sub{font-size:10px;color:var(--text-dim);}
 .live-dot{width:7px;height:7px;border-radius:50%;background:var(--accent3);flex-shrink:0;animation:blink 2s infinite;}
@@ -176,7 +176,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .tc-green{border-left-color:var(--accent3);}.tc-green .tip-hdr{color:var(--accent3);}
 
 /* HOME HERO */
-.home-hero{background:linear-gradient(135deg,#0a1628 0%,#0f2044 50%,#0a1628 100%);border:1px solid var(--border);border-radius:var(--radius);padding:20px 16px;margin-bottom:16px;text-align:center;position:relative;overflow:hidden;}
+.home-hero{background:linear-gradient(135deg,#080f1f 0%,#0a1830 40%,#0c1e3a 100%);border:1px solid rgba(0,119,255,0.25);border-radius:var(--radius);padding:24px 16px;margin-bottom:16px;text-align:center;position:relative;overflow:hidden;}
 .home-hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 60% 40%,rgba(0,200,240,0.07) 0%,transparent 60%);pointer-events:none;}
 .home-hero h2{font-size:20px;font-weight:800;color:var(--accent);margin-bottom:4px;}
 .home-hero p{font-size:13px;color:var(--text-dim);}
@@ -395,7 +395,7 @@ td{padding:10px 12px;border-top:1px solid var(--border);color:var(--text-mid);ve
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ONT Trainer">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="description" content="KCOM DZS ONT Engineer Training — GPON Fault Finder and ZMS Guide">
+<meta name="description" content="JB DZS ONT Engineer Training — GPON Fault Finder and ZMS Guide">
 <link rel="manifest" id="pwaManifest">
 <link rel="apple-touch-icon" id="pwaIcon">
 <style>
@@ -437,8 +437,8 @@ td{padding:10px 12px;border-top:1px solid var(--border);color:var(--text-mid);ve
 // ═══════════════════════════════════════
 (function(){
   const manifest = {
-    name: "KCOM ONT Engineer Training",
-    short_name: "ONT Trainer",
+    name: "JB ONT Engineer Training",
+    short_name: "JB",
     description: "DZS GPON fault finder and ZMS guide for KCOM Lightstream network engineers",
     start_url: "./",
     display: "standalone",
@@ -446,16 +446,16 @@ td{padding:10px 12px;border-top:1px solid var(--border);color:var(--text-mid);ve
     theme_color: "#090d18",
     orientation: "portrait-primary",
     icons: [
-      { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%23090d18'/%3E%3Crect x='16' y='16' width='160' height='160' rx='24' fill='%230f1626' stroke='%2300c8f0' stroke-width='4'/%3E%3Ctext x='96' y='115' font-size='80' text-anchor='middle' fill='%2300c8f0'%3E📡%3C/text%3E%3Ctext x='96' y='155' font-size='18' font-weight='bold' text-anchor='middle' fill='%2300c8f0' font-family='Arial'%3EKCOM%3C/text%3E%3C/svg%3E",
+      { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%23090d18'/%3E%3Crect x='16' y='16' width='160' height='160' rx='24' fill='%230f1626' stroke='%2300c8f0' stroke-width='4'/%3E%3Ctext x='96' y='115' font-size='80' text-anchor='middle' fill='%2300c8f0'%3E📡%3C/text%3E%3Ctext x='96' y='155' font-size='18' font-weight='bold' text-anchor='middle' fill='%2300c8f0' font-family='Arial'%3EJB%3C/text%3E%3C/svg%3E",
         sizes: "192x192", type: "image/svg+xml", purpose: "any maskable" },
-      { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%23090d18'/%3E%3Crect x='32' y='32' width='448' height='448' rx='64' fill='%230f1626' stroke='%2300c8f0' stroke-width='8'/%3E%3Ctext x='256' y='300' font-size='200' text-anchor='middle' fill='%2300c8f0'%3E📡%3C/text%3E%3Ctext x='256' y='420' font-size='60' font-weight='bold' text-anchor='middle' fill='%2300c8f0' font-family='Arial'%3EKCOM%3C/text%3E%3C/svg%3E",
+      { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%23090d18'/%3E%3Crect x='32' y='32' width='448' height='448' rx='64' fill='%230f1626' stroke='%2300c8f0' stroke-width='8'/%3E%3Ctext x='256' y='300' font-size='200' text-anchor='middle' fill='%2300c8f0'%3E📡%3C/text%3E%3Ctext x='256' y='420' font-size='60' font-weight='bold' text-anchor='middle' fill='%2300c8f0' font-family='Arial'%3EJB%3C/text%3E%3C/svg%3E",
         sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
     ],
     categories: ["utilities", "productivity"],
     shortcuts: [
-      { name: "Fault Finder", short_name: "Faults", description: "Guided fault diagnosis", url: "./#search", icons: [{ src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Ctext y='80' font-size='80'%3E🔍%3C/text%3E%3C/svg%3E", sizes: "96x96" }] },
-      { name: "Alarm Codes", short_name: "Alarms", description: "GPON alarm reference", url: "./#alarms", icons: [{ src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Ctext y='80' font-size='80'%3E🔔%3C/text%3E%3C/svg%3E", sizes: "96x96" }] },
-      { name: "Checklist", short_name: "Check", description: "First-time fix checklist", url: "./#checklist", icons: [{ src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Ctext y='80' font-size='80'%3E✅%3C/text%3E%3C/svg%3E", sizes: "96x96" }] }
+      { name: "Fault Finder", short_name: "JB", description: "Guided fault diagnosis", url: "./#search", icons: [{ src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Ctext y='80' font-size='80'%3E🔍%3C/text%3E%3C/svg%3E", sizes: "96x96" }] },
+      { name: "Alarm Codes", short_name: "JB", description: "GPON alarm reference", url: "./#alarms", icons: [{ src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Ctext y='80' font-size='80'%3E🔔%3C/text%3E%3C/svg%3E", sizes: "96x96" }] },
+      { name: "Checklist", short_name: "JB", description: "First-time fix checklist", url: "./#checklist", icons: [{ src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Ctext y='80' font-size='80'%3E✅%3C/text%3E%3C/svg%3E", sizes: "96x96" }] }
     ]
   };
   const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
@@ -463,7 +463,7 @@ td{padding:10px 12px;border-top:1px solid var(--border);color:var(--text-mid);ve
   document.getElementById('pwaManifest').href = url;
 
   // Apple touch icon (SVG inline)
-  const iconSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23090d18'/><rect x='10' y='10' width='160' height='160' rx='32' fill='%230f1626' stroke='%2300c8f0' stroke-width='3'/><text x='90' y='105' font-size='72' text-anchor='middle'>📡</text><text x='90' y='145' font-size='22' font-weight='bold' text-anchor='middle' fill='%2300c8f0' font-family='Arial'>KCOM</text></svg>`;
+  const iconSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23090d18'/><rect x='10' y='10' width='160' height='160' rx='32' fill='%230f1626' stroke='%2300c8f0' stroke-width='3'/><text x='90' y='105' font-size='72' text-anchor='middle'>📡</text><text x='90' y='145' font-size='22' font-weight='bold' text-anchor='middle' fill='%2300c8f0' font-family='Arial'>JB</text></svg>`;
   document.getElementById('pwaIcon').href = 'data:image/svg+xml,' + iconSvg;
 })();
 
@@ -652,56 +652,7 @@ window.addEventListener('DOMContentLoaded', function() {
     _origResetWizard();
   };
 
-  // ── renderQuiz: show start card first ──
-  const _origRenderQuiz = renderQuiz;
-  window.renderQuiz = function() {
-    if (!window._quizStarted) {
-      document.getElementById('quizContainer').innerHTML = `
-        <div class="quiz-start-card">
-          <div class="qs-icon">🎯</div>
-          <h3>Knowledge Check</h3>
-          <p>10 scenario-based questions covering GPON faults, ZMS diagnostics, optical theory, and common field mistakes.</p>
-          <button class="res-btn res-btn-primary" style="width:100%" onclick="beginQuiz()">Start Quiz →</button>
-        </div>`;
-      return;
-    }
-    _origRenderQuiz();
-  };
-  window.beginQuiz = function() { window._quizStarted = true; renderQuiz(); };
 
-  // ── handleSearch: debounce + highlight ──
-  window.handleSearch = function(val) {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-      const clear = document.getElementById('searchClear');
-      const sugg = document.getElementById('searchSugg');
-      const def = document.getElementById('searchDefault');
-      const wiz = document.getElementById('wizardWrap');
-      if (wiz && wiz.classList.contains('show')) return;
-      if(clear) clear.classList.toggle('show', val.length > 0);
-      if (!val.trim()) { if(sugg) sugg.classList.remove('show'); if(def) def.style.display=''; return; }
-      if(def) def.style.display = 'none';
-      const v = val.toLowerCase();
-      const results = searchIndex.filter(i =>
-        i.q.includes(v) || i.title.toLowerCase().includes(v) || i.sub.toLowerCase().includes(v)
-      ).slice(0,6);
-      if (!sugg) return;
-      if (!results.length) {
-        sugg.innerHTML='<div class="empty-state"><div class="ei">🤔</div><p>No match. Try: "red light", "no internet", "flashing alarm"</p></div>';
-        sugg.classList.add('show'); return;
-      }
-      sugg.innerHTML = results.map(r=>`
-        <div class="suggestion-item" onclick="startWizard('${r.id}')">
-          <div class="sug-icon">${r.icon}</div>
-          <div class="sug-text">
-            <strong>${highlightMatch(r.title, val)}</strong>
-            <span>${r.sub}</span>
-          </div>
-          <span class="sug-badge ${r.cls}">${r.sev}</span>
-        </div>`).join('');
-      sugg.classList.add('show');
-    }, 150);
-  };
 
   // ── URL hash navigation ──
   const hash = window.location.hash.replace('#','');
@@ -869,8 +820,8 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
 <header class="app-header">
-  <div class="header-badge">KCOM</div>
-  <div><div class="header-title">DZS ONT Engineer Training</div><div class="header-sub">GPON LIGHTSTREAM NETWORK</div></div>
+  <div class="header-badge">JB</div>
+  <div><div class="header-title">DZS ONT Engineer Training</div><div class="header-sub">FIBRE NETWORK · FIELD OPERATIONS</div></div>
   <div class="live-dot"></div>
 </header>
 
@@ -889,8 +840,8 @@ window.addEventListener('DOMContentLoaded', function() {
 <!-- HOME -->
 <div id="screen-home" class="screen active">
   <div class="home-hero">
-    <h2>ONT Fault Trainer</h2>
-    <p>KCOM Lightstream · DZS GPON · ZMS Platform</p>
+    <h2>JB ONT Fault Trainer</h2>
+    <p>DZS GPON · ZMS Platform · Field Operations</p>
   </div>
   <div class="screen-title">⚡ Quick Actions</div>
   <div class="quick-grid">
@@ -926,7 +877,7 @@ window.addEventListener('DOMContentLoaded', function() {
     <div style="position:absolute;top:-20px;right:-20px;font-size:80px;opacity:0.08;">🤖</div>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
       <div style="font-size:28px;">🤖</div>
-      <div><div style="font-weight:700;font-size:15px;color:var(--accent);">KCOM AI Fault Assistant</div><div style="font-size:12px;color:var(--text-dim);">Powered by Claude · GPON expert knowledge</div></div>
+      <div><div style="font-weight:700;font-size:15px;color:var(--accent);">JB AI Fault Assistant</div><div style="font-size:12px;color:var(--text-dim);">Powered by Claude · GPON expert knowledge</div></div>
     </div>
     <p style="font-size:13px;color:var(--text-mid);margin-bottom:14px;line-height:1.5;">Describe any fault in plain English and get instant expert diagnosis. Analyse ZMS readings. Train with realistic scenarios.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
@@ -1109,7 +1060,7 @@ window.addEventListener('DOMContentLoaded', function() {
   <div class="under-construction">
     <div class="uc-icon">🚧</div>
     <div class="uc-title">UNDER CONSTRUCTION</div>
-    <div class="uc-sub">The AI Assistant is being configured and will be available soon for all KCOM engineers.</div>
+    <div class="uc-sub">The AI Assistant is being configured and will be available soon for all JB engineers.</div>
     <div class="uc-badge"><div class="uc-badge-dot"></div> COMING SOON</div>
     <div class="uc-features">
       <div class="uc-feature"><span class="uc-feature-icon">💬</span>Free-text fault diagnosis chat</div>
@@ -1174,22 +1125,54 @@ const searchIndex = [
 ];
 
 function handleSearch(val) {
+  // Single clean implementation — lives in same script block as searchIndex
+  // so const searchIndex is always in scope. No override chain needed.
+  clearTimeout(window._searchTimeout);
   const clear = document.getElementById('searchClear');
-  const sugg = document.getElementById('searchSugg');
-  const def = document.getElementById('searchDefault');
-  const wiz = document.getElementById('wizardWrap');
-  if (wiz.classList.contains('show')) return;
-  clear.classList.toggle('show', val.length > 0);
-  if (!val.trim()) { sugg.classList.remove('show'); def.style.display=''; return; }
-  def.style.display = 'none';
-  const v = val.toLowerCase();
-  const results = searchIndex.filter(i => i.q.includes(v) || i.title.toLowerCase().includes(v) || i.sub.toLowerCase().includes(v)).slice(0,6);
-  if (!results.length) {
-    sugg.innerHTML='<div class="empty-state"><div class="ei">🤔</div><p>No match. Try: "red light", "no internet", "flashing alarm"</p></div>';
-    sugg.classList.add('show'); return;
+  const sugg  = document.getElementById('searchSugg');
+  const def   = document.getElementById('searchDefault');
+  const wiz   = document.getElementById('wizardWrap');
+
+  if (clear) clear.classList.toggle('show', val.length > 0);
+
+  if (!val.trim()) {
+    if (sugg) sugg.classList.remove('show');
+    if (def)  def.style.display = '';
+    return;
   }
-  sugg.innerHTML = results.map(r=>`<div class="suggestion-item" onclick="startWizard('${r.id}')"><div class="sug-icon">${r.icon}</div><div class="sug-text"><strong>${r.title}</strong><span>${r.sub}</span></div><span class="sug-badge ${r.cls}">${r.sev}</span></div>`).join('');
-  sugg.classList.add('show');
+
+  if (wiz && wiz.classList.contains('show')) return;
+  if (def) def.style.display = 'none';
+
+  window._searchTimeout = setTimeout(function() {
+    if (!sugg) return;
+    var v = val.toLowerCase();
+    var results = searchIndex.filter(function(item) {
+      return item.q.includes(v) ||
+             item.title.toLowerCase().includes(v) ||
+             item.sub.toLowerCase().includes(v);
+    }).slice(0, 6);
+
+    if (!results.length) {
+      sugg.innerHTML = '<div class="empty-state"><div class="ei">🤔</div>'
+        + '<p>No match. Try: "red light", "no internet", "flashing alarm"</p></div>';
+      sugg.classList.add('show');
+      return;
+    }
+
+    sugg.innerHTML = results.map(function(r) {
+      var hl = val.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      var re = new RegExp('(' + hl + ')', 'gi');
+      var title = r.title.replace(re, '<span class="sug-highlight">$1</span>');
+      return '<div class="suggestion-item" onclick="startWizard(\'' + r.id + '\')">'
+        + '<div class="sug-icon">' + r.icon + '</div>'
+        + '<div class="sug-text"><strong>' + title + '</strong>'
+        + '<span>' + r.sub + '</span></div>'
+        + '<span class="sug-badge ' + r.cls + '">' + r.sev + '</span>'
+        + '</div>';
+    }).join('');
+    sugg.classList.add('show');
+  }, 120);
 }
 function clearSearch() {
   document.getElementById('faultSearch').value='';
@@ -1995,9 +1978,9 @@ function shareResolution(btn) {
   if (!card) return;
   const title = card.querySelector('.res-card-title').textContent;
   const steps = [...card.querySelectorAll('.step-body h4')].map((h,i) => (i+1)+'. '+h.textContent).join('\n');
-  const text = 'KCOM ONT Fault Guide\n' + title + '\n\n' + steps;
+  const text = 'JB ONT Fault Guide\n' + title + '\n\n' + steps;
   if (navigator.share) {
-    navigator.share({ title: 'KCOM ONT: ' + title, text }).catch(()=>{});
+    navigator.share({ title: 'JB ONT: ' + title, text }).catch(()=>{});
   } else {
     navigator.clipboard.writeText(text).then(() => {
       btn.textContent = '✓ Copied';
@@ -2097,7 +2080,7 @@ async function callAI(messages, maxTokens = 600) {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer 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',
-        'X-Title': 'KCOM ONT Engineer Trainer'
+        'X-Title': 'JB ONT Engineer Trainer'
       },
       body: JSON.stringify({
         model: 'anthropic/claude-sonnet-4-5',
@@ -2302,7 +2285,7 @@ function showWelcomeMessage() {
   div.className = 'msg ai';
   div.innerHTML = '<div class="msg-avatar">🤖</div>'
     + '<div class="msg-bubble">'
-    + '<strong>Hi, I'm your KCOM ONT Assistant.</strong><br><br>'
+    + '<strong>Hi, I'm your JB ONT Assistant.</strong><br><br>'
     + 'I know everything about DZS GPON faults, ZMS diagnostics, optical power levels, alarm codes, and the Lightstream network.<br><br>'
     + (isHosted
         ? 'Describe what you're seeing and I'll help you diagnose it fast. Or tap one of the quick actions below. 👇'
@@ -2604,10 +2587,23 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  // Also scroll the active screen div if it has overflow
+  // Scroll every possible container - needed because artifact iframes,
+  // PWA shells, and mobile browsers each use a different scroll root
+  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
+  try { document.body.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
+  try { document.documentElement.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
+
+  // Scroll the .app-body div (the main content wrapper)
+  const appBody = document.querySelector('.app-body');
+  if (appBody) try { appBody.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
+
+  // Scroll the active screen if it has its own scroll context
   const active = document.querySelector('.screen.active');
-  if (active) active.scrollTop = 0;
+  if (active) try { active.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
+
+  // Hard fallback: scroll the header into view (always works)
+  const header = document.querySelector('.app-header');
+  if (header) header.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 </script>
 
