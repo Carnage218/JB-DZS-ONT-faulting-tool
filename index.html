@@ -283,29 +283,6 @@ td{padding:10px 12px;border-top:1px solid var(--border);color:var(--text-mid);ve
 
 <!-- ═══ PWA META + MANIFEST ═══ -->
 <!-- Injected before <style>.tab-btn{padding:10px 16px;font-size:13px;font-weight:600;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;background:transparent;border-top:none;border-left:none;border-right:none;font-family:inherit;margin-bottom:-1px;}.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
-/* ── BACK TO TOP BUTTON ── */
-.screen-back-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  margin-top: 24px;
-  margin-bottom: 8px;
-  padding: 13px 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  color: var(--text-dim);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s;
-  letter-spacing: 0.5px;
-}
-.screen-back-btn:active { background: var(--surface2); transform: scale(0.99); }
-.screen-back-btn:hover  { border-color: var(--accent); color: var(--accent); }
 
 /* ── UNDER CONSTRUCTION BANNER ── */
 .under-construction {
@@ -698,29 +675,6 @@ window.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>.tab-btn{padding:10px 16px;font-size:13px;font-weight:600;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;background:transparent;border-top:none;border-left:none;border-right:none;font-family:inherit;margin-bottom:-1px;}.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
-/* ── BACK TO TOP BUTTON ── */
-.screen-back-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  margin-top: 24px;
-  margin-bottom: 8px;
-  padding: 13px 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  color: var(--text-dim);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s;
-  letter-spacing: 0.5px;
-}
-.screen-back-btn:active { background: var(--surface2); transform: scale(0.99); }
-.screen-back-btn:hover  { border-color: var(--accent); color: var(--accent); }
 
 /* ── UNDER CONSTRUCTION BANNER ── */
 .under-construction {
@@ -886,8 +840,6 @@ window.addEventListener('DOMContentLoaded', function() {
       <button class="res-btn" style="border-color:var(--accent);color:var(--accent);background:transparent;font-size:13px;grid-column:span 2" onclick="showScreen('ai',null,'nav-ai');setTimeout(()=>switchAiMode('scenario',document.getElementById('aiTab-scenario')),200)">🎯 Scenario Training</button>
     </div>
   </div>
-
-  <button class="screen-back-btn" onclick="scrollToTop()">↑ Back to Top</button>
 </div>
 
 <!-- SEARCH / FAULT FINDER -->
@@ -924,8 +876,6 @@ window.addEventListener('DOMContentLoaded', function() {
       <div class="module-item" onclick="startWizard('voip')"><div class="mi-icon">📞</div><div class="mi-body"><div class="mi-title">No dial tone / phone not working</div><div class="mi-sub">VoIP/POTS fault</div></div><span class="mi-badge b-min">MINOR</span><div class="mi-arrow">›</div></div>
     </div>
   </div>
-
-  <button class="screen-back-btn" onclick="scrollToTop()">↑ Back to Top</button>
 </div>
 
 <!-- MODULES -->
@@ -945,8 +895,6 @@ window.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
   <div id="refArea"></div>
-
-  <button class="screen-back-btn" onclick="scrollToTop()">↑ Back to Top</button>
 </div>
 
 <!-- ALARMS -->
@@ -957,8 +905,6 @@ window.addEventListener('DOMContentLoaded', function() {
     <input type="text" class="search-input" placeholder="Search alarms... e.g. LOS, DGi, rogue" oninput="filterAlarms(this.value)">
   </div>
   <div id="alarmList"></div>
-
-  <button class="screen-back-btn" onclick="scrollToTop()">↑ Back to Top</button>
 </div>
 
 <!-- CHECKLIST -->
@@ -967,16 +913,12 @@ window.addEventListener('DOMContentLoaded', function() {
   <div class="alert alert-info"><strong>📋 Before closing any job</strong>Tap each item as you verify it. Reset when starting a new job.</div>
   <div class="checklist" id="checklistEl"></div>
   <button class="check-reset-btn" onclick="resetChecklist()">↺ Reset for New Job</button>
-
-  <button class="screen-back-btn" onclick="scrollToTop()">↑ Back to Top</button>
 </div>
 
 <!-- QUIZ -->
 <div id="screen-quiz" class="screen">
   <div class="screen-title">🎯 Knowledge Check</div>
   <div id="quizContainer"></div>
-
-  <button class="screen-back-btn" onclick="scrollToTop()">↑ Back to Top</button>
 </div>
 
 <style id="ai-styles">
@@ -1055,7 +997,6 @@ window.addEventListener('DOMContentLoaded', function() {
 .analyse-btn:active{transform:scale(0.99);}
 </style>
 
-<!-- AI SCREEN HTML (insert before </div><!-- end app-body -->) -->
 <div id="screen-ai" class="screen">
   <div class="under-construction">
     <div class="uc-icon">🚧</div>
@@ -1071,12 +1012,9 @@ window.addEventListener('DOMContentLoaded', function() {
     <div class="uc-divider"></div>
     <div class="uc-note">All other features — Fault Finder, Modules, Alarm Reference, Checklist and Quiz — are fully available now.</div>
   </div>
-  <button class="screen-back-btn" onclick="scrollToTop()">
-    ↑ Back to Top
-  </button>
 </div>
 
-</div><!-- end app-body -->
+</div>
 
 <nav class="bottom-nav">
   <div class="nav-tab active" id="nav-home" onclick="showScreen('home',null,'nav-home')"><span class="nav-icon">🏠</span><span>Home</span></div>
@@ -2586,25 +2524,6 @@ window.addEventListener('DOMContentLoaded', function() {
   };
 });
 
-function scrollToTop() {
-  // Scroll every possible container - needed because artifact iframes,
-  // PWA shells, and mobile browsers each use a different scroll root
-  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
-  try { document.body.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
-  try { document.documentElement.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
-
-  // Scroll the .app-body div (the main content wrapper)
-  const appBody = document.querySelector('.app-body');
-  if (appBody) try { appBody.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
-
-  // Scroll the active screen if it has its own scroll context
-  const active = document.querySelector('.screen.active');
-  if (active) try { active.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
-
-  // Hard fallback: scroll the header into view (always works)
-  const header = document.querySelector('.app-header');
-  if (header) header.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
 </script>
 
 </body>
