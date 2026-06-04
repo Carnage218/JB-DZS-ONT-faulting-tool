@@ -1,0 +1,2530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>JB · DZS ONT Engineer Training</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+:root {
+  --bg:#090d18; --surface:#0f1626; --surface2:#162035; --surface3:#1e2d47;
+  --border:#1e3a5f; --border2:#253d5e;
+  --accent:#00c8f0; --accent-dim:rgba(0,200,240,0.12);
+  --accent2:#ff6b35; --accent3:#00e87a;
+  --warn:#ffb800; --warn-dim:rgba(255,184,0,0.12);
+  --danger:#ff3b5c; --danger-dim:rgba(255,59,92,0.12);
+  --ok-dim:rgba(0,232,122,0.12);
+  --text:#dce8f8; --text-dim:#6b88aa; --text-mid:#8fa8c8;
+  --radius:10px; --radius-sm:6px; --header-h:56px; --nav-h:62px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:15px;line-height:1.5;padding-bottom:calc(var(--nav-h) + 8px);}
+
+/* HEADER */
+.app-header{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--header-h);background:rgba(9,13,24,0.98);border-bottom:1px solid rgba(0,119,255,0.3);backdrop-filter:blur(16px);display:flex;align-items:center;gap:12px;padding:0 16px;box-shadow:0 1px 20px rgba(0,119,255,0.1);}
+.header-badge{background:linear-gradient(135deg,#0055cc,#0077ff);color:#fff;font-weight:900;font-size:15px;padding:5px 14px;border-radius:6px;letter-spacing:3px;flex-shrink:0;box-shadow:0 2px 12px rgba(0,119,255,0.45);}
+.header-title{font-size:14px;font-weight:600;color:var(--text);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.header-sub{font-size:10px;color:var(--text-dim);}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--accent3);flex-shrink:0;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:200;height:var(--nav-h);background:rgba(9,13,24,0.98);border-top:1px solid var(--border);backdrop-filter:blur(12px);display:flex;}
+.nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;transition:all 0.2s;color:var(--text-dim);font-size:10px;font-weight:500;padding:6px 2px;position:relative;}
+.nav-tab .nav-icon{font-size:20px;transition:transform 0.2s;}
+.nav-tab.active{color:var(--accent);}
+.nav-tab.active .nav-icon{transform:translateY(-2px);}
+.nav-tab.active::before{content:'';position:absolute;top:0;left:15%;right:15%;height:2px;background:var(--accent);border-radius:0 0 3px 3px;}
+.nav-tab:active{opacity:0.7;}
+
+/* DESKTOP NAV */
+.desktop-nav{display:none;gap:0;background:rgba(9,13,24,0.97);border-bottom:1px solid var(--border);padding:0 20px;position:sticky;top:var(--header-h);z-index:150;backdrop-filter:blur(12px);overflow-x:auto;}
+.desktop-nav::-webkit-scrollbar{display:none;}
+.d-nav-item{padding:12px 18px;font-size:13px;font-weight:600;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;background:transparent;border-top:none;border-left:none;border-right:none;font-family:inherit;}
+.d-nav-item:hover{color:var(--text);}
+.d-nav-item.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* APP BODY */
+.app-body{padding-top:calc(var(--header-h) + 12px);padding-left:12px;padding-right:12px;}
+
+/* SCREENS */
+.screen{display:none;animation:fadeUp 0.25s ease;}
+.screen.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTION TITLE */
+.screen-title{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+
+/* SEARCH */
+.search-wrap{position:relative;margin-bottom:14px;}
+.search-input{width:100%;padding:13px 16px 13px 44px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:inherit;font-size:15px;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+.search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim);}
+.search-input::placeholder{color:var(--text-dim);}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;pointer-events:none;}
+.search-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:var(--surface3);border:none;color:var(--text-dim);width:24px;height:24px;border-radius:50%;font-size:14px;cursor:pointer;display:none;align-items:center;justify-content:center;}
+.search-clear.show{display:flex;}
+
+/* SUGGESTIONS */
+.search-suggestions{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;display:none;}
+.search-suggestions.show{display:block;}
+.suggestion-item{padding:12px 16px;cursor:pointer;transition:background 0.15s;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);font-size:14px;}
+.suggestion-item:last-child{border-bottom:none;}
+.suggestion-item:active{background:var(--surface2);}
+.sug-icon{font-size:18px;flex-shrink:0;}
+.sug-text{flex:1;}
+.sug-text strong{display:block;font-weight:600;margin-bottom:1px;}
+.sug-text span{font-size:12px;color:var(--text-dim);}
+.sug-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700;flex-shrink:0;}
+.b-crit{background:var(--danger-dim);color:var(--danger);border:1px solid var(--danger);}
+.b-maj{background:var(--warn-dim);color:var(--warn);border:1px solid var(--warn);}
+.b-min{background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent);}
+.b-info{background:var(--ok-dim);color:var(--accent3);border:1px solid var(--accent3);}
+
+/* WIZARD */
+.wizard-wrap{display:none;}
+.wizard-wrap.show{display:block;}
+.wizard-header{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.wizard-icon{font-size:28px;}
+.wizard-title{font-weight:700;font-size:16px;}
+.wizard-sub{font-size:12px;color:var(--text-dim);margin-top:2px;}
+.wizard-back{margin-left:auto;background:transparent;border:1px solid var(--border);color:var(--text-dim);font-size:12px;padding:6px 12px;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.prog-wrap{margin-bottom:14px;}
+.prog-track{height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:2px;transition:width 0.4s ease;}
+.prog-label{font-size:11px;color:var(--text-dim);margin-top:5px;}
+.wizard-step{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px;animation:fadeUp 0.2s ease;}
+.step-q{font-size:15px;font-weight:600;margin-bottom:6px;}
+.step-ctx{font-size:13px;color:var(--text-dim);margin-bottom:14px;line-height:1.5;}
+.step-opts{display:flex;flex-direction:column;gap:10px;}
+.step-opt{background:var(--surface2);border:1.5px solid var(--border2);border-radius:var(--radius-sm);padding:13px 16px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:12px;text-align:left;width:100%;font-family:inherit;color:var(--text);}
+.step-opt:active{transform:scale(0.98);}
+.step-opt:focus,.step-opt:hover{border-color:var(--accent);background:var(--surface3);}
+.step-opt-icon{font-size:20px;flex-shrink:0;}
+.step-opt-body{flex:1;}
+.step-opt-body strong{display:block;font-size:14px;font-weight:600;margin-bottom:2px;}
+.step-opt-body span{font-size:12px;color:var(--text-dim);}
+.step-opt-arr{color:var(--text-dim);font-size:16px;}
+
+/* RESOLUTION CARD */
+.res-card{background:var(--surface);border:1.5px solid var(--accent);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;animation:fadeUp 0.25s ease;}
+.res-card-header{background:linear-gradient(135deg,rgba(0,200,240,0.15),rgba(0,200,240,0.05));padding:16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);}
+.res-card-title{font-weight:700;font-size:16px;flex:1;}
+.res-sev{font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;}
+.action-steps{}
+.action-step{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;gap:12px;cursor:pointer;transition:background 0.15s;position:relative;}
+.action-step:last-child{border-bottom:none;}
+.action-step:active{background:var(--surface2);}
+.action-step.done{opacity:0.65;}
+.step-circle{width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px;transition:all 0.2s;background:var(--surface);}
+.action-step.done .step-circle{background:var(--accent3);border-color:var(--accent3);color:#001a3a;}
+.step-body{flex:1;}
+.step-body h4{font-size:14px;font-weight:600;margin-bottom:4px;}
+.step-body p{font-size:13px;color:var(--text-dim);line-height:1.5;}
+.step-code{background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px;padding:8px 10px;margin-top:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--accent3);white-space:pre-wrap;word-break:break-all;}
+.step-tick{margin-left:auto;font-size:18px;color:var(--text-dim);flex-shrink:0;align-self:center;}
+.step-expand{display:none;padding:0 16px 14px 56px;}
+.step-expand.open{display:block;}
+.step-expand p{font-size:13px;color:var(--text-dim);line-height:1.6;}
+.res-actions{padding:14px 16px;display:flex;gap:10px;flex-wrap:wrap;border-top:1px solid var(--border);background:var(--surface2);}
+.res-btn{flex:1;min-width:120px;padding:11px 16px;border-radius:var(--radius-sm);border:1.5px solid;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;text-align:center;}
+.res-btn-primary{background:var(--accent);border-color:var(--accent);color:#001a3a;}
+.res-btn-sec{background:transparent;border-color:var(--border2);color:var(--text-dim);}
+.res-btn:active{transform:scale(0.97);}
+
+/* ALERTS */
+.alert{padding:12px 14px;border-radius:var(--radius-sm);margin-bottom:12px;font-size:13px;border-left:3px solid;line-height:1.5;}
+.alert strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;font-weight:700;}
+.alert-warn{background:var(--warn-dim);border-color:var(--warn);color:#e8c84a;}
+.alert-danger{background:var(--danger-dim);border-color:var(--danger);color:#ff8fa5;}
+.alert-info{background:var(--accent-dim);border-color:var(--accent);color:#7dd4f0;}
+.alert-ok{background:var(--ok-dim);border-color:var(--accent3);color:#66ffb2;}
+
+/* CATEGORY GRID */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 12px;cursor:pointer;transition:all 0.15s;text-align:center;position:relative;overflow:hidden;}
+.cat-card:active{transform:scale(0.97);}
+.cat-card:hover{border-color:var(--accent);}
+.cat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;transform:scaleX(0);transition:transform 0.2s;}
+.cat-card:hover::before{transform:scaleX(1);}
+.cc-crit::before{background:var(--danger);}.cc-maj::before{background:var(--warn);}.cc-min::before{background:var(--accent);}.cc-info::before{background:var(--accent3);}
+.cat-card .ci{font-size:26px;margin-bottom:6px;}
+.cat-card .cl{font-size:12px;font-weight:600;margin-bottom:4px;}
+.cat-card .cd{font-size:11px;color:var(--text-dim);line-height:1.3;}
+.cat-card .cs{font-size:9px;font-weight:700;letter-spacing:1px;margin-top:6px;display:block;}
+.sc-crit{color:var(--danger);}.sc-maj{color:var(--warn);}.sc-min{color:var(--accent);}.sc-info{color:var(--accent3);}
+
+/* MODULE LIST */
+.module-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.module-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:12px;}
+.module-item:active{transform:scale(0.99);background:var(--surface2);}
+.mi-icon{font-size:22px;flex-shrink:0;}
+.mi-body{flex:1;}
+.mi-title{font-size:14px;font-weight:600;margin-bottom:2px;}
+.mi-sub{font-size:12px;color:var(--text-dim);}
+.mi-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700;flex-shrink:0;}
+.mi-arrow{color:var(--text-dim);font-size:16px;flex-shrink:0;}
+
+/* TIPS */
+.tip-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--warn);border-radius:var(--radius);padding:14px;margin-bottom:10px;}
+.tip-card .tip-hdr{display:flex;align-items:center;gap:8px;margin-bottom:0;font-weight:700;font-size:13px;color:var(--warn);cursor:pointer;}
+.tip-card .tip-body{font-size:13px;color:var(--text-dim);line-height:1.5;display:none;margin-top:8px;}
+.tip-card.open .tip-body{display:block;}
+.tip-arrow{margin-left:auto;transition:transform 0.2s;font-size:12px;}
+.tip-card.open .tip-arrow{transform:rotate(180deg);}
+.tc-blue{border-left-color:var(--accent);}.tc-blue .tip-hdr{color:var(--accent);}
+.tc-green{border-left-color:var(--accent3);}.tc-green .tip-hdr{color:var(--accent3);}
+
+/* HOME HERO */
+.home-hero{background:linear-gradient(135deg,#080f1f 0%,#0a1830 40%,#0c1e3a 100%);border:1px solid rgba(0,119,255,0.25);border-radius:var(--radius);padding:24px 16px;margin-bottom:16px;text-align:center;position:relative;overflow:hidden;}
+.home-hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 60% 40%,rgba(0,200,240,0.07) 0%,transparent 60%);pointer-events:none;}
+.home-hero h2{font-size:20px;font-weight:800;color:var(--accent);margin-bottom:4px;}
+.home-hero p{font-size:13px;color:var(--text-dim);}
+
+/* QUICK GRID */
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.quick-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 12px;cursor:pointer;transition:all 0.15s;text-align:center;}
+.quick-card:active{transform:scale(0.97);background:var(--surface2);}
+.qc-icon{font-size:28px;margin-bottom:6px;}
+.qc-label{font-size:13px;font-weight:600;margin-bottom:2px;}
+.qc-sub{font-size:11px;color:var(--text-dim);}
+
+/* DETAIL STEPS */
+.detail-steps{display:flex;flex-direction:column;gap:0;margin-bottom:14px;}
+.detail-step{background:var(--surface);border:1px solid var(--border);padding:14px;margin-top:-1px;}
+.detail-step:first-child{border-radius:var(--radius) var(--radius) 0 0;}
+.detail-step:last-child{border-radius:0 0 var(--radius) var(--radius);}
+.detail-step:only-child{border-radius:var(--radius);}
+.ds-inner{display:flex;gap:12px;}
+.ds-num{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#001a3a;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;}
+.ds-body h4{font-size:14px;font-weight:600;margin-bottom:4px;}
+.ds-body p{font-size:13px;color:var(--text-dim);line-height:1.5;}
+.ds-code{background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px;padding:8px 10px;margin-top:8px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--accent3);white-space:pre-wrap;word-break:break-all;}
+
+/* OPTICAL GAUGE */
+.optical-gauge{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
+.gauge-title{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;}
+.gauge-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.gauge-lbl{width:78px;font-size:11px;color:var(--text-dim);text-align:right;flex-shrink:0;font-family:'Share Tech Mono',monospace;}
+.gauge-track{flex:1;height:10px;background:var(--surface2);border-radius:5px;overflow:hidden;}
+.gauge-fill{height:100%;border-radius:5px;}
+.g-ideal{background:linear-gradient(90deg,#00e87a,#00c8f0);width:55%;}
+.g-good{background:linear-gradient(90deg,#00c8f0,#0099ee);width:40%;}
+.g-warn{background:linear-gradient(90deg,#ffb800,#ff6b00);width:25%;}
+.g-bad{background:linear-gradient(90deg,#ff3b5c,#cc0033);width:10%;}
+.gauge-val{width:100px;font-size:11px;font-family:'Share Tech Mono',monospace;flex-shrink:0;}
+.gv-ideal{color:var(--accent3);}.gv-good{color:var(--accent);}.gv-warn{color:var(--warn);}.gv-bad{color:var(--danger);}
+
+/* LED ROWS */
+.led-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;}
+.led-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border);}
+.led-row:last-child{border-bottom:none;}
+.led-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+.led-row-body{flex:1;}
+.led-row-body strong{font-size:13px;display:block;margin-bottom:2px;}
+.led-row-body span{font-size:12px;color:var(--text-dim);}
+.led-sev{font-size:11px;font-weight:700;flex-shrink:0;}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;margin-bottom:14px;border-radius:var(--radius);border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:var(--surface2);padding:10px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:700;white-space:nowrap;}
+td{padding:10px 12px;border-top:1px solid var(--border);color:var(--text-mid);vertical-align:top;}
+
+/* FLOW BLOCK */
+.flow-block{background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius-sm);padding:14px;margin-bottom:10px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--accent3);white-space:pre-wrap;word-break:break-all;line-height:1.8;overflow-x:auto;}
+
+/* REF HEADER */
+.ref-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.back-btn{background:var(--surface);border:1px solid var(--border);color:var(--text-dim);font-size:20px;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.15s;}
+.back-btn:active{background:var(--surface2);}
+.ref-header h2{font-size:17px;font-weight:700;flex:1;}
+.ref-sev-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;flex-shrink:0;}
+
+/* CHECKLIST */
+.checklist{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.check-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.15s;}
+.check-item:active{background:var(--surface2);}
+.check-item.checked{opacity:0.65;}
+.check-box{width:22px;height:22px;border-radius:5px;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;background:var(--surface2);font-size:14px;}
+.check-item.checked .check-box{background:var(--accent3);border-color:var(--accent3);color:#001a3a;}
+.check-lbl{font-size:13px;flex:1;}
+.check-item.checked .check-lbl{text-decoration:line-through;color:var(--text-dim);}
+.check-reset-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-size:12px;padding:10px 20px;border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;width:100%;margin-top:4px;}
+
+/* QUIZ */
+.quiz-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.quiz-num{font-size:11px;color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.quiz-q{font-size:15px;font-weight:600;margin-bottom:16px;line-height:1.5;}
+.quiz-opts{display:flex;flex-direction:column;gap:8px;}
+.quiz-opt{background:var(--surface2);border:1.5px solid var(--border2);border-radius:var(--radius-sm);padding:12px 14px;cursor:pointer;transition:all 0.15s;font-family:inherit;color:var(--text);text-align:left;width:100%;font-size:13px;line-height:1.4;}
+.quiz-opt:active{transform:scale(0.99);}
+.quiz-opt.correct{background:var(--ok-dim);border-color:var(--accent3);color:var(--accent3);}
+.quiz-opt.wrong{background:var(--danger-dim);border-color:var(--danger);color:var(--danger);}
+.quiz-feedback{margin-top:10px;display:none;font-size:13px;padding:10px 12px;border-radius:var(--radius-sm);}
+.quiz-score-card{background:var(--surface);border:2px solid var(--accent);border-radius:var(--radius);padding:24px;text-align:center;margin-bottom:14px;}
+.quiz-score-num{font-size:48px;font-weight:800;color:var(--accent);}
+.quiz-score-lbl{font-size:14px;color:var(--text-dim);margin-top:4px;}
+.quiz-grade{font-size:16px;font-weight:700;margin-top:10px;}
+
+/* MISC */
+.hl{color:var(--accent);font-weight:600;}
+.hl-warn{color:var(--warn);font-weight:600;}
+.hl-ok{color:var(--accent3);font-weight:600;}
+.hl-danger{color:var(--danger);font-weight:600;}
+.empty-state{text-align:center;padding:32px 16px;color:var(--text-dim);}
+.empty-state .ei{font-size:40px;margin-bottom:10px;}
+.empty-state p{font-size:14px;}
+.section-sep{height:1px;background:var(--border);margin:16px 0;}
+
+@media(min-width:600px){.cat-grid{grid-template-columns:repeat(3,1fr);}.quick-grid{grid-template-columns:repeat(4,1fr);}}
+@media(min-width:900px){body{padding-bottom:0;}.bottom-nav{display:none;}.desktop-nav{display:flex;}.app-body{padding-top:12px;max-width:820px;margin:0 auto;padding-left:20px;padding-right:20px;}}
+</style>
+
+<!-- ═══ PWA META + MANIFEST ═══ -->
+<!-- Injected before <style>.tab-btn{padding:10px 16px;font-size:13px;font-weight:600;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;background:transparent;border-top:none;border-left:none;border-right:none;font-family:inherit;margin-bottom:-1px;}.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* ── UNDER CONSTRUCTION BANNER ── */
+.under-construction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px 24px;
+  min-height: 60vh;
+}
+.uc-icon { font-size: 64px; margin-bottom: 16px; }
+.uc-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--warn);
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+.uc-sub {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 300px;
+  margin-bottom: 20px;
+}
+.uc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,184,0,0.12);
+  border: 1.5px solid var(--warn);
+  border-radius: 20px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--warn);
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+}
+.uc-badge-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--warn);
+  animation: blink 1.2s infinite;
+}
+.uc-features {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.uc-feature {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--text-dim);
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.uc-feature-icon { font-size: 18px; flex-shrink: 0; }
+.uc-divider {
+  width: 100%;
+  max-width: 320px;
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0 16px;
+}
+.uc-note {
+  font-size: 11px;
+  color: var(--text-dim);
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+</style>
+</head> -->
+<meta name="theme-color" content="#090d18">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ONT Trainer">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="JB DZS ONT Engineer Training — GPON Fault Finder and ZMS Guide">
+<link rel="manifest" id="pwaManifest">
+<link rel="apple-touch-icon" id="pwaIcon">
+<style>
+/* ── PWA INSTALL BANNER ── */
+.pwa-banner{position:fixed;bottom:calc(var(--nav-h) + 10px);left:12px;right:12px;background:var(--surface);border:1.5px solid var(--accent);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:12px;z-index:300;box-shadow:0 4px 24px rgba(0,200,240,0.2);animation:fadeUp 0.3s ease;}
+.pwa-banner-text{flex:1;}
+.pwa-banner-text strong{display:block;font-size:13px;font-weight:700;margin-bottom:2px;}
+.pwa-banner-text span{font-size:12px;color:var(--text-dim);}
+.pwa-install-btn{background:var(--accent);color:#001a3a;border:none;border-radius:6px;padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;}
+.pwa-dismiss{background:transparent;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;padding:4px;flex-shrink:0;}
+/* ── OFFLINE BADGE ── */
+.offline-badge{position:fixed;top:calc(var(--header-h) + 8px);left:50%;transform:translateX(-50%);background:var(--warn);color:#001a3a;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;z-index:300;display:none;letter-spacing:1px;}
+.offline-badge.show{display:block;}
+/* ── IMPROVEMENT: search highlight ── */
+.sug-highlight{background:rgba(0,200,240,0.15);border-radius:2px;color:var(--accent);}
+/* ── IMPROVEMENT: step counter badge ── */
+.step-counter{font-size:10px;color:var(--text-dim);text-align:right;margin-bottom:8px;font-family:'Share Tech Mono',monospace;}
+/* ── IMPROVEMENT: back button in wizard ── */
+.wiz-back-step{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-size:12px;padding:6px 12px;border-radius:6px;cursor:pointer;font-family:inherit;margin-bottom:12px;display:none;}
+.wiz-back-step.show{display:inline-flex;align-items:center;gap:6px;}
+/* ── IMPROVEMENT: resolution share button ── */
+.res-share-btn{background:transparent;border:1.5px solid var(--border2);color:var(--text-dim);border-radius:var(--radius-sm);padding:10px 14px;font-family:inherit;font-size:13px;cursor:pointer;}
+/* ── IMPROVEMENT: empty quiz state ── */
+.quiz-start-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px 20px;text-align:center;margin-bottom:14px;}
+.quiz-start-card .qs-icon{font-size:48px;margin-bottom:12px;}
+.quiz-start-card h3{font-size:18px;font-weight:700;margin-bottom:8px;}
+.quiz-start-card p{font-size:13px;color:var(--text-dim);margin-bottom:20px;line-height:1.5;}
+/* ── IMPROVEMENT: smooth step transitions ── */
+.wizard-step{animation:fadeUp 0.2s ease;}
+/* ── IMPROVEMENT: visited step history ── */
+.wiz-history{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.wiz-crumb{font-size:10px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:3px 8px;color:var(--text-dim);white-space:nowrap;}
+.wiz-crumb-arrow{color:var(--text-dim);font-size:10px;align-self:center;}
+</style>
+
+<script>
+// ═══════════════════════════════════════
+// PWA: MANIFEST INJECTION
+// ═══════════════════════════════════════
+(function(){
+  const manifest = {
+    name: "JB ONT Engineer Training",
+    short_name: "JB",
+    description: "DZS GPON fault finder and ZMS guide for KCOM Lightstream network engineers",
+    start_url: "./",
+    display: "standalone",
+    background_color: "#090d18",
+    theme_color: "#090d18",
+    orientation: "portrait-primary",
+    icons: [
+      { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%23090d18'/%3E%3Crect x='16' y='16' width='160' height='160' rx='24' fill='%230f1626' stroke='%2300c8f0' stroke-width='4'/%3E%3Ctext x='96' y='115' font-size='80' text-anchor='middle' fill='%2300c8f0'%3E📡%3C/text%3E%3Ctext x='96' y='155' font-size='18' font-weight='bold' text-anchor='middle' fill='%2300c8f0' font-family='Arial'%3EJB%3C/text%3E%3C/svg%3E",
+        sizes: "192x192", type: "image/svg+xml", purpose: "any maskable" },
+      { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%23090d18'/%3E%3Crect x='32' y='32' width='448' height='448' rx='64' fill='%230f1626' stroke='%2300c8f0' stroke-width='8'/%3E%3Ctext x='256' y='300' font-size='200' text-anchor='middle' fill='%2300c8f0'%3E📡%3C/text%3E%3Ctext x='256' y='420' font-size='60' font-weight='bold' text-anchor='middle' fill='%2300c8f0' font-family='Arial'%3EJB%3C/text%3E%3C/svg%3E",
+        sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
+    ],
+    categories: ["utilities", "productivity"],
+    shortcuts: [
+      { name: "Fault Finder", short_name: "JB", description: "Guided fault diagnosis", url: "./#search", icons: [{ src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Ctext y='80' font-size='80'%3E🔍%3C/text%3E%3C/svg%3E", sizes: "96x96" }] },
+      { name: "Alarm Codes", short_name: "JB", description: "GPON alarm reference", url: "./#alarms", icons: [{ src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Ctext y='80' font-size='80'%3E🔔%3C/text%3E%3C/svg%3E", sizes: "96x96" }] },
+      { name: "Checklist", short_name: "JB", description: "First-time fix checklist", url: "./#checklist", icons: [{ src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Ctext y='80' font-size='80'%3E✅%3C/text%3E%3C/svg%3E", sizes: "96x96" }] }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  document.getElementById('pwaManifest').href = url;
+
+  // Apple touch icon (SVG inline)
+  const iconSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23090d18'/><rect x='10' y='10' width='160' height='160' rx='32' fill='%230f1626' stroke='%2300c8f0' stroke-width='3'/><text x='90' y='105' font-size='72' text-anchor='middle'>📡</text><text x='90' y='145' font-size='22' font-weight='bold' text-anchor='middle' fill='%2300c8f0' font-family='Arial'>JB</text></svg>`;
+  document.getElementById('pwaIcon').href = 'data:image/svg+xml,' + iconSvg;
+})();
+
+// ═══════════════════════════════════════
+// PWA: SERVICE WORKER REGISTRATION
+// ═══════════════════════════════════════
+const SW_CODE = `
+const CACHE = 'kcom-ont-v1';
+const ASSETS = [self.location.href];
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
+  self.skipWaiting();
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(keys =>
+    Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))
+  ));
+  self.clients.claim();
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(cached => {
+      if (cached) return cached;
+      return fetch(e.request).then(resp => {
+        if (resp && resp.status === 200) {
+          const clone = resp.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+        }
+        return resp;
+      }).catch(() => cached || new Response('Offline', {status:503}));
+    })
+  );
+});
+`;
+
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  window.addEventListener('load', () => {
+    try {
+      const blob = new Blob([SW_CODE], {type:'application/javascript'});
+      const swUrl = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(swUrl, {scope:'./'})
+        .then(reg => console.log('SW registered:', reg.scope))
+        .catch(err => {
+          // Blob URL SW not supported in this context — skip silently
+          console.log('SW skipped (hosted file required):', err.message);
+        });
+    } catch(e) {
+      console.log('SW unavailable:', e.message);
+    }
+  });
+}
+
+// ═══════════════════════════════════════
+// PWA: INSTALL PROMPT
+// ═══════════════════════════════════════
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!localStorage.getItem('pwa-dismissed')) showInstallBanner();
+});
+
+function showInstallBanner() {
+  const banner = document.getElementById('pwaBanner');
+  if (banner) banner.style.display = 'flex';
+}
+
+function installApp() {
+  const banner = document.getElementById('pwaBanner');
+  if (banner) banner.style.display = 'none';
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(r => {
+      if (r.outcome === 'accepted') console.log('PWA installed');
+      deferredPrompt = null;
+    });
+  }
+}
+
+function dismissBanner() {
+  const banner = document.getElementById('pwaBanner');
+  if (banner) banner.style.display = 'none';
+  localStorage.setItem('pwa-dismissed', '1');
+}
+
+window.addEventListener('appinstalled', () => {
+  const banner = document.getElementById('pwaBanner');
+  if (banner) banner.style.display = 'none';
+  deferredPrompt = null;
+});
+
+// ═══════════════════════════════════════
+// PWA: OFFLINE DETECTION
+// ═══════════════════════════════════════
+function updateOnlineStatus() {
+  const badge = document.getElementById('offlineBadge');
+  if (!badge) return;
+  if (!navigator.onLine) { badge.classList.add('show'); }
+  else { badge.classList.remove('show'); }
+}
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+window.addEventListener('load', updateOnlineStatus);
+
+// ═══════════════════════════════════════
+// ALL FUNCTION OVERRIDES — deferred until
+// after all scripts have parsed & defined
+// ═══════════════════════════════════════
+let wizHistory = [];
+let searchTimeout;
+
+function highlightMatch(text, query) {
+  if (!query) return text;
+  const re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+  return text.replace(re, '<span class="sug-highlight">$1</span>');
+}
+
+function haptic(style) {
+  if (navigator.vibrate) {
+    navigator.vibrate(style === 'light' ? 10 : style === 'success' ? [10,50,10] : 20);
+  }
+}
+
+function renderWizHistory() {
+  const el = document.getElementById('wizHistory');
+  if (!el || !wizHistory.length) { if(el) el.innerHTML=''; return; }
+  el.innerHTML = wizHistory.map((h,i) =>
+    `<span class="wiz-crumb">${h}</span>${i < wizHistory.length-1 ? '<span class="wiz-crumb-arrow">›</span>' : ''}`
+  ).join('');
+}
+
+function wizStepBack() {
+  const id = wState.id;
+  if (id) { wizHistory = []; startWizard(id); }
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+
+  // ── showScreen: fix desktop nav active state ──
+  const _origShowScreen = showScreen;
+  window.showScreen = function(id, desktopEl, navId) {
+    _origShowScreen(id, desktopEl, navId);
+    if (!desktopEl) {
+      document.querySelectorAll('.d-nav-item').forEach(btn => {
+        const oc = btn.getAttribute('onclick') || '';
+        if (oc.includes("'" + id + "'") || oc.includes('"' + id + '"')) {
+          btn.classList.add('active');
+        }
+      });
+    }
+  };
+
+  // ── startWizard: reset breadcrumb history ──
+  const _origStartWizard = startWizard;
+  window.startWizard = function(id) {
+    wizHistory = [];
+    _origStartWizard(id);
+    renderWizHistory();
+  };
+
+  // ── renderStep: show back button + breadcrumbs ──
+  const _origRenderStep = renderStep;
+  window.renderStep = function(stepData) {
+    const backBtn = document.getElementById('wizBackStep');
+    if (backBtn && stepData && stepData.q) backBtn.classList.add('show');
+    _origRenderStep(stepData);
+    renderWizHistory();
+  };
+
+  // ── pickOpt: capture question for breadcrumb ──
+  const _origPickOpt = pickOpt;
+  window.pickOpt = function(nextKey, resKey) {
+    const curStep = document.querySelector('.step-q');
+    if (curStep) wizHistory.push(curStep.textContent.trim().substring(0, 30) + '…');
+    _origPickOpt(nextKey, resKey);
+  };
+
+  // ── resetWizard: clear breadcrumbs ──
+  const _origResetWizard = resetWizard;
+  window.resetWizard = function() {
+    wizHistory = [];
+    const hist = document.getElementById('wizHistory');
+    if (hist) hist.innerHTML = '';
+    const backBtn = document.getElementById('wizBackStep');
+    if (backBtn) backBtn.classList.remove('show');
+    _origResetWizard();
+  };
+
+
+
+  // ── URL hash navigation ──
+  const hash = window.location.hash.replace('#','');
+  if (hash && ['home','search','modules','alarms','checklist','quiz','ai'].includes(hash)) {
+    showScreen(hash, null, 'nav-' + hash);
+  }
+
+  // ── Haptic on tap ──
+  document.addEventListener('click', e => {
+    if (e.target.closest('.step-opt, .cat-card, .module-item, .quiz-opt, .res-btn, .nav-tab')) {
+      haptic('light');
+    }
+  });
+
+  // ── Auto-resize textareas on focus ──
+  ['aiInput','scenarioInput'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('focus', () => autoResize(el));
+      // Also handle compositionend for IME input (CJK keyboards etc)
+      el.addEventListener('compositionend', () => autoResize(el));
+    }
+  });
+
+  // ── Swipe navigation ──
+  const swipeScreens = ['home','search','modules','alarms','checklist'];
+  let touchX = 0;
+  document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, {passive:true});
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) < 80) return;
+    const wiz = document.getElementById('wizardWrap');
+    if (wiz && wiz.classList.contains('show')) return;
+    const activeScreen = document.querySelector('.screen.active');
+    if (!activeScreen) return;
+    const curId = activeScreen.id.replace('screen-','');
+    const idx = swipeScreens.indexOf(curId);
+    if (dx < 0 && idx < swipeScreens.length-1) { showScreen(swipeScreens[idx+1], null, 'nav-'+swipeScreens[idx+1]); haptic('light'); }
+    if (dx > 0 && idx > 0) { showScreen(swipeScreens[idx-1], null, 'nav-'+swipeScreens[idx-1]); haptic('light'); }
+  }, {passive:true});
+
+}); // end DOMContentLoaded
+</script>
+
+<style>.tab-btn{padding:10px 16px;font-size:13px;font-weight:600;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;background:transparent;border-top:none;border-left:none;border-right:none;font-family:inherit;margin-bottom:-1px;}.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* ── UNDER CONSTRUCTION BANNER ── */
+.under-construction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px 24px;
+  min-height: 60vh;
+}
+.uc-icon { font-size: 64px; margin-bottom: 16px; }
+.uc-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--warn);
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+.uc-sub {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 300px;
+  margin-bottom: 20px;
+}
+.uc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,184,0,0.12);
+  border: 1.5px solid var(--warn);
+  border-radius: 20px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--warn);
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+}
+.uc-badge-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--warn);
+  animation: blink 1.2s infinite;
+}
+.uc-features {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.uc-feature {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--text-dim);
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.uc-feature-icon { font-size: 18px; flex-shrink: 0; }
+.uc-divider {
+  width: 100%;
+  max-width: 320px;
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0 16px;
+}
+.uc-note {
+  font-size: 11px;
+  color: var(--text-dim);
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+</style>
+</head>
+<body>
+
+<div id="offlineBadge" class="offline-badge">⚡ OFFLINE MODE</div>
+<div id="pwaBanner" class="pwa-banner" style="display:none">
+  <div style="font-size:24px">📱</div>
+  <div class="pwa-banner-text">
+    <strong>Install on your phone</strong>
+    <span>Works offline in plant rooms &amp; exchanges</span>
+  </div>
+  <button class="pwa-install-btn" onclick="installApp()">Install</button>
+  <button class="pwa-dismiss" onclick="dismissBanner()">✕</button>
+</div>
+
+
+<header class="app-header">
+  <div class="header-badge">JB</div>
+  <div><div class="header-title">DZS ONT Engineer Training</div><div class="header-sub">FIBRE NETWORK · FIELD OPERATIONS</div></div>
+  <div class="live-dot"></div>
+</header>
+
+<nav class="desktop-nav" id="deskNav">
+  <button type="button" class="d-nav-item active" onclick="showScreen('home',this)">🏠 Home</button>
+  <button type="button" class="d-nav-item" onclick="showScreen('search',this)">🔍 Fault Finder</button>
+  <button type="button" class="d-nav-item" onclick="showScreen('modules',this)">📚 Modules</button>
+  <button type="button" class="d-nav-item" onclick="showScreen('alarms',this)">🔔 Alarms</button>
+  <button type="button" class="d-nav-item" onclick="showScreen('checklist',this)">✅ Checklist</button>
+  <button type="button" class="d-nav-item" onclick="showScreen('quiz',this)">🎯 Quiz</button>
+  <button type="button" class="d-nav-item" onclick="showScreen('ai',this)">🤖 AI Chat 🚧</button>
+</nav>
+
+<div class="app-body">
+
+<!-- HOME -->
+<div id="screen-home" class="screen active">
+  <div class="home-hero">
+    <h2>JB ONT Fault Trainer</h2>
+    <p>DZS GPON · ZMS Platform · Field Operations</p>
+  </div>
+  <div class="screen-title">⚡ Quick Actions</div>
+  <div class="quick-grid">
+    <div class="quick-card" onclick="showScreen('search')"><div class="qc-icon">🔍</div><div class="qc-label">Fault Finder</div><div class="qc-sub">Guided diagnosis</div></div>
+    <div class="quick-card" onclick="showScreen('modules')"><div class="qc-icon">📚</div><div class="qc-label">Modules</div><div class="qc-sub">All topics</div></div>
+    <div class="quick-card" onclick="showScreen('alarms')"><div class="qc-icon">🔔</div><div class="qc-label">Alarms</div><div class="qc-sub">Code reference</div></div>
+    <div class="quick-card" onclick="showScreen('quiz')"><div class="qc-icon">🎯</div><div class="qc-label">Quiz</div><div class="qc-sub">Test yourself</div></div>
+  </div>
+  <div class="screen-title">🔴 Fault Categories</div>
+  <div class="cat-grid">
+    <div class="cat-card cc-crit" onclick="startWizard('los')"><div class="ci">🔴</div><div class="cl">No Signal (LOS)</div><div class="cd">PON LED red or off</div><span class="cs sc-crit">CRITICAL</span></div>
+    <div class="cat-card cc-crit" onclick="startWizard('rogue')"><div class="ci">🚨</div><div class="cl">Rogue ONT</div><div class="cd">ALARM LED flashing red</div><span class="cs sc-crit">CRITICAL</span></div>
+    <div class="cat-card cc-maj" onclick="startWizard('noreg')"><div class="ci">🟠</div><div class="cl">Not Registering</div><div class="cd">PON LED flashing</div><span class="cs sc-maj">MAJOR</span></div>
+    <div class="cat-card cc-maj" onclick="startWizard('intermittent')"><div class="ci">🟡</div><div class="cl">Intermittent</div><div class="cd">Random drops</div><span class="cs sc-maj">MAJOR</span></div>
+    <div class="cat-card cc-maj" onclick="startWizard('noservice')"><div class="ci">📵</div><div class="cl">No Service</div><div class="cd">PON OK, no internet</div><span class="cs sc-maj">MAJOR</span></div>
+    <div class="cat-card cc-min" onclick="startWizard('slow')"><div class="ci">🐌</div><div class="cl">Slow Speeds</div><div class="cd">Performance issue</div><span class="cs sc-min">MINOR</span></div>
+    <div class="cat-card cc-maj" onclick="startWizard('power')"><div class="ci">⚡</div><div class="cl">Power/Hardware</div><div class="cd">ONT dead or alarm</div><span class="cs sc-maj">MAJOR</span></div>
+    <div class="cat-card cc-min" onclick="startWizard('voip')"><div class="ci">📞</div><div class="cl">No Phone/VoIP</div><div class="cd">No dial tone</div><span class="cs sc-min">MINOR</span></div>
+  </div>
+  <div class="screen-title">💡 Pro Tips</div>
+  <div class="tip-card tc-blue" onclick="toggleTip(this)"><div class="tip-hdr">⚡ Check ZMS before leaving the van <span class="tip-arrow">▼</span></div><div class="tip-body">Opening ZMS takes 2 minutes and shapes your entire approach. Check: Is the ONT online? What alarms are active? How many ONTs on the same PON port are affected? This tells you whether you're at the right address before you knock.</div></div>
+  <div class="tip-card tc-blue" onclick="toggleTip(this)"><div class="tip-hdr">🔌 Green = APC = correct for KCOM GPON <span class="tip-arrow">▼</span></div><div class="tip-body">Never mate a blue (UPC) patchlead to a green (APC) port. The 8° angle mismatch adds 3–8 dB of silent loss. Symptoms look identical to a fibre fault and cleaning does nothing. Always check connector colour before mating.</div></div>
+  <div class="tip-card" onclick="toggleTip(this)"><div class="tip-hdr">⚠️ Neighbours down too? Don't work at this house <span class="tip-arrow">▼</span></div><div class="tip-body">In ZMS, check the PON port view. If multiple customers show LOSi or offline simultaneously, the fault is upstream of the splitter. Working at one premises won't fix it. Escalate to NOC immediately.</div></div>
+  <div class="tip-card tc-green" onclick="toggleTip(this)"><div class="tip-hdr">📊 BIP errors rising but power looks fine = dirty connector <span class="tip-arrow">▼</span></div><div class="tip-body">Rx power at -23 dBm can look fine while BIP errors climb rapidly. The connector corrupts the signal without dropping power below threshold. Check ZMS → Statistics → GTC. Clean the connector — errors should drop to zero within minutes.</div></div>
+  <div class="tip-card" onclick="toggleTip(this)"><div class="tip-hdr">🌡️ DOWi alarm = check ONT temperature first <span class="tip-arrow">▼</span></div><div class="tip-body">Drift of Window is almost always caused by overheating. An ONT in a hot cupboard will drift out of its upstream time slot, eventually becoming a rogue. Check ZMS temperature reading first.</div></div>
+  <div class="tip-card tc-green" onclick="toggleTip(this)"><div class="tip-hdr">🔋 DGi with no power complaint = failing PSU adapter <span class="tip-arrow">▼</span></div><div class="tip-body">If ZMS shows a DGi but the customer says they never lost power, the PSU adapter is almost certainly failing under load. Swap the PSU before any other investigation — it's the cheapest and quickest fix.</div></div>
+  <div class="tip-card tc-blue" onclick="toggleTip(this)"><div class="tip-hdr">🔋 Power cycle LAST — not first <span class="tip-arrow">▼</span></div><div class="tip-body">Power cycling clears the current alarm state and resets counters. Always capture ZMS alarm state, optical power, and BIP counters BEFORE rebooting. The data before your intervention often reveals the cause more clearly than after.</div></div>
+  <div class="tip-card" onclick="toggleTip(this)"><div class="tip-hdr">👥 5 questions to ask the customer on arrival <span class="tip-arrow">▼</span></div><div class="tip-body">1. When exactly did it stop? (correlate with ZMS timestamp) 2. Sudden stop or gradual? (event vs degradation) 3. Anything changed recently? (building work, furniture moved) 4. Does it happen in rain or at certain times? (environmental) 5. Has anyone touched the white box or the cable? (connector disturbed)</div></div>
+
+  <div class="section-sep"></div>
+  <div class="screen-title">🤖 AI Assistant</div>
+  <div style="background:linear-gradient(135deg,#001a3a,#003366);border:1.5px solid var(--accent);border-radius:var(--radius);padding:18px 16px;margin-bottom:16px;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-20px;right:-20px;font-size:80px;opacity:0.08;">🤖</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+      <div style="font-size:28px;">🤖</div>
+      <div><div style="font-weight:700;font-size:15px;color:var(--accent);">JB AI Fault Assistant</div><div style="font-size:12px;color:var(--text-dim);">Powered by Claude · GPON expert knowledge</div></div>
+    </div>
+    <p style="font-size:13px;color:var(--text-mid);margin-bottom:14px;line-height:1.5;">Describe any fault in plain English and get instant expert diagnosis. Analyse ZMS readings. Train with realistic scenarios.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <button class="res-btn res-btn-primary" onclick="showScreen('ai',null,'nav-ai')" style="font-size:13px">💬 Chat 🚧</button>
+      <button class="res-btn" style="border-color:var(--accent);color:var(--accent);background:transparent;font-size:13px;" onclick="showScreen('ai',null,'nav-ai');setTimeout(()=>switchAiMode('readings',document.getElementById('aiTab-readings')),200)">📊 Readings</button>
+      <button class="res-btn" style="border-color:var(--accent);color:var(--accent);background:transparent;font-size:13px;grid-column:span 2" onclick="showScreen('ai',null,'nav-ai');setTimeout(()=>switchAiMode('scenario',document.getElementById('aiTab-scenario')),200)">🎯 Scenario Training</button>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH / FAULT FINDER -->
+<div id="screen-search" class="screen">
+  <div class="screen-title">🔍 Fault Finder</div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="faultSearch" placeholder="Describe fault... e.g. 'red light', 'no internet'" oninput="handleSearch(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+    <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+  </div>
+  <div class="search-suggestions" id="searchSugg"></div>
+  <div class="wizard-wrap" id="wizardWrap">
+    <div class="wizard-header">
+      <div class="wizard-icon" id="wiz-icon">🔧</div>
+      <div><div class="wizard-title" id="wiz-title">Guided Diagnosis</div><div class="wizard-sub" id="wiz-sub">Answer each question to identify the fault</div></div>
+      <button class="wizard-back" onclick="resetWizard()">✕ Exit</button>
+    </div>
+    <div class="wiz-history" id="wizHistory"></div>
+<button class="wiz-back-step" id="wizBackStep" onclick="wizStepBack()">← Restart from beginning</button>
+<div class="prog-wrap"><div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div><div class="prog-label" id="progLabel">Step 0</div></div>
+    <div id="wizContent"></div>
+  </div>
+  <div id="searchDefault">
+    <div class="alert alert-info"><strong>💡 How to use Fault Finder</strong>Type what you see — e.g. "red light", "no internet", "flashing alarm", "no dial tone" — or tap a common fault below.</div>
+    <div class="screen-title">Common Faults</div>
+    <div class="module-list">
+      <div class="module-item" onclick="startWizard('los')"><div class="mi-icon">🔴</div><div class="mi-body"><div class="mi-title">PON LED red or no light</div><div class="mi-sub">Loss of optical signal</div></div><span class="mi-badge b-crit">CRITICAL</span><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="startWizard('rogue')"><div class="mi-icon">🚨</div><div class="mi-body"><div class="mi-title">ALARM LED flashing red</div><div class="mi-sub">Possible rogue ONT</div></div><span class="mi-badge b-crit">CRITICAL</span><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="startWizard('noreg')"><div class="mi-icon">🟠</div><div class="mi-body"><div class="mi-title">PON LED flashing green, won't go solid</div><div class="mi-sub">ONT not registering</div></div><span class="mi-badge b-maj">MAJOR</span><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="startWizard('intermittent')"><div class="mi-icon">🟡</div><div class="mi-body"><div class="mi-title">Connection keeps dropping</div><div class="mi-sub">Intermittent fault</div></div><span class="mi-badge b-maj">MAJOR</span><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="startWizard('noservice')"><div class="mi-icon">📵</div><div class="mi-body"><div class="mi-title">PON green but no internet</div><div class="mi-sub">Service/provisioning fault</div></div><span class="mi-badge b-maj">MAJOR</span><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="startWizard('power')"><div class="mi-icon">⚡</div><div class="mi-body"><div class="mi-title">ONT completely dead / all LEDs off</div><div class="mi-sub">Power/hardware fault</div></div><span class="mi-badge b-maj">MAJOR</span><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="startWizard('slow')"><div class="mi-icon">🐌</div><div class="mi-body"><div class="mi-title">Very slow broadband speeds</div><div class="mi-sub">Performance fault</div></div><span class="mi-badge b-min">MINOR</span><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="startWizard('voip')"><div class="mi-icon">📞</div><div class="mi-body"><div class="mi-title">No dial tone / phone not working</div><div class="mi-sub">VoIP/POTS fault</div></div><span class="mi-badge b-min">MINOR</span><div class="mi-arrow">›</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULES -->
+<div id="screen-modules" class="screen">
+  <div id="modListWrap">
+    <div class="screen-title">📚 Training Modules</div>
+    <div class="module-list">
+      <div class="module-item" onclick="showRef('network')"><div class="mi-icon">🌐</div><div class="mi-body"><div class="mi-title">Network Architecture</div><div class="mi-sub">GPON topology, OLT/ONT path, KCOM infrastructure</div></div><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="showRef('leds')"><div class="mi-icon">🚦</div><div class="mi-body"><div class="mi-title">LED Status Guide</div><div class="mi-sub">All LED states interpreted</div></div><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="showRef('optical')"><div class="mi-icon">💡</div><div class="mi-body"><div class="mi-title">Optical Power Levels</div><div class="mi-sub">Rx/Tx thresholds, budget calculation</div></div><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="showRef('bip')"><div class="mi-icon">📉</div><div class="mi-body"><div class="mi-title">BIP Error Counters</div><div class="mi-sub">Early-warning diagnostic data in ZMS</div></div><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="showRef('connectors')"><div class="mi-icon">🔌</div><div class="mi-body"><div class="mi-title">APC vs UPC Connectors</div><div class="mi-sub">Why mixing types silently kills signal</div></div><span class="mi-badge b-crit">!</span><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="showRef('environmental')"><div class="mi-icon">🌧️</div><div class="mi-body"><div class="mi-title">Environmental Faults</div><div class="mi-sub">Water, temperature, rodents, physical damage</div></div><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="showRef('zms')"><div class="mi-icon">🖥️</div><div class="mi-body"><div class="mi-title">ZMS Platform Guide</div><div class="mi-sub">Navigation, diagnostics, provisioning, firmware</div></div><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="showRef('tools')"><div class="mi-icon">🧰</div><div class="mi-body"><div class="mi-title">Field Tools Guide</div><div class="mi-sub">Power meter, VFL, OTDR, fibre scope</div></div><div class="mi-arrow">›</div></div>
+      <div class="module-item" onclick="showRef('flowchart')"><div class="mi-icon">🗺️</div><div class="mi-body"><div class="mi-title">Fault Decision Flowchart</div><div class="mi-sub">Full decision tree from symptom to fix</div></div><div class="mi-arrow">›</div></div>
+    </div>
+  </div>
+  <div id="refArea"></div>
+</div>
+
+<!-- ALARMS -->
+<div id="screen-alarms" class="screen">
+  <div class="screen-title">🔔 Alarm Code Reference</div>
+  <div class="search-wrap" style="margin-bottom:12px">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" placeholder="Search alarms... e.g. LOS, DGi, rogue" oninput="filterAlarms(this.value)">
+  </div>
+  <div id="alarmList"></div>
+</div>
+
+<!-- CHECKLIST -->
+<div id="screen-checklist" class="screen">
+  <div class="screen-title">✅ First-Time Fix Checklist</div>
+  <div class="alert alert-info"><strong>📋 Before closing any job</strong>Tap each item as you verify it. Reset when starting a new job.</div>
+  <div class="checklist" id="checklistEl"></div>
+  <button class="check-reset-btn" onclick="resetChecklist()">↺ Reset for New Job</button>
+</div>
+
+<!-- QUIZ -->
+<div id="screen-quiz" class="screen">
+  <div class="screen-title">🎯 Knowledge Check</div>
+  <div id="quizContainer"></div>
+</div>
+
+<style id="ai-styles">
+/* ── AI CHAT SCREEN ── */
+.ai-screen-wrap{display:flex;flex-direction:column;height:calc(100vh - var(--header-h) - var(--nav-h) - 24px);}
+.ai-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.ai-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#003366,#0066cc);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ai-header-info{flex:1;}
+.ai-header-info h3{font-size:15px;font-weight:700;}
+.ai-status{font-size:11px;color:var(--accent3);display:flex;align-items:center;gap:5px;}
+.ai-status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent3);animation:blink 2s infinite;}
+.ai-status.thinking .ai-status-dot{background:var(--warn);animation:blink 0.5s infinite;}
+.ai-clear-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-size:12px;padding:6px 10px;border-radius:6px;cursor:pointer;font-family:inherit;}
+
+.ai-messages{flex:1;overflow-y:auto;padding:4px 0;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;}
+.ai-messages::-webkit-scrollbar{width:3px;}
+.ai-messages::-webkit-scrollbar-track{background:transparent;}
+.ai-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+/* Message bubbles */
+.msg{display:flex;gap:8px;animation:fadeUp 0.2s ease;}
+.msg.user{flex-direction:row-reverse;}
+.msg-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px;}
+.msg.ai .msg-avatar{background:linear-gradient(135deg,#003366,#0066cc);border:1px solid var(--accent);}
+.msg.user .msg-avatar{background:var(--surface3);border:1px solid var(--border);}
+.msg-bubble{max-width:82%;padding:11px 14px;border-radius:14px;font-size:13px;line-height:1.55;}
+.msg.ai .msg-bubble{background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:4px;color:var(--text);}
+.msg.user .msg-bubble{background:linear-gradient(135deg,#003d6e,#005a9e);border:1px solid rgba(0,200,240,0.3);border-bottom-right-radius:4px;color:var(--text);}
+
+/* AI message formatting */
+.msg-bubble b,.msg-bubble strong{color:var(--accent);font-weight:700;}
+.msg-bubble .ai-code{background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px;padding:6px 10px;margin:6px 0;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--accent3);white-space:pre-wrap;word-break:break-all;display:block;}
+.msg-bubble .ai-warn{color:var(--warn);}
+.msg-bubble .ai-ok{color:var(--accent3);}
+.msg-bubble .ai-danger{color:var(--danger);}
+.msg-bubble ul{padding-left:16px;margin:4px 0;}
+.msg-bubble ul li{margin-bottom:3px;}
+.msg-bubble .ai-step{display:flex;gap:8px;padding:4px 0;}
+.msg-bubble .ai-step-num{background:var(--accent);color:#001a3a;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;margin-top:1px;}
+
+/* Typing indicator */
+.typing-indicator{display:flex;gap:4px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:14px;border-bottom-left-radius:4px;width:fit-content;}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--text-dim);animation:typingBounce 1.2s infinite;}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes typingBounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);}}
+
+/* Quick prompts */
+.quick-prompts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.qp-chip{background:var(--surface);border:1.5px solid var(--border2);border-radius:20px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;white-space:nowrap;color:var(--text-mid);}
+.qp-chip:active{transform:scale(0.97);}
+.qp-chip:hover{border-color:var(--accent);color:var(--accent);}
+
+/* Input area */
+.ai-input-area{padding-top:10px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;}
+.ai-textarea{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:11px 14px;color:var(--text);font-family:inherit;font-size:14px;outline:none;resize:none;transition:border-color 0.2s;line-height:1.5;overflow-y:auto;word-wrap:break-word;}
+.ai-textarea:focus{border-color:var(--accent);}
+.ai-textarea::placeholder{color:var(--text-dim);}
+.ai-send-btn{width:44px;height:44px;border-radius:50%;background:var(--accent);border:none;color:#001a3a;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
+.ai-send-btn:active{transform:scale(0.93);}
+.ai-send-btn:disabled{background:var(--surface3);color:var(--text-dim);}
+
+/* Scenario card */
+.scenario-card{background:var(--surface);border:1.5px solid var(--accent2);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;}
+.scenario-header{background:rgba(255,107,53,0.12);padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.scenario-title{font-weight:700;font-size:15px;flex:1;}
+.scenario-body{padding:14px 16px;font-size:13px;color:var(--text-dim);line-height:1.6;}
+
+/* Reading analyser */
+.reading-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.reading-input-wrap{display:flex;flex-direction:column;gap:4px;}
+.reading-input-wrap label{font-size:11px;color:var(--text-dim);font-weight:600;letter-spacing:0.5px;}
+.reading-input{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:14px;outline:none;transition:border-color 0.2s;width:100%;}
+.reading-input:focus{border-color:var(--accent);}
+.analyse-btn{width:100%;padding:12px;background:var(--accent);color:#001a3a;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:12px;}
+.analyse-btn:active{transform:scale(0.99);}
+</style>
+
+<div id="screen-ai" class="screen">
+  <div class="under-construction">
+    <div class="uc-icon">🚧</div>
+    <div class="uc-title">UNDER CONSTRUCTION</div>
+    <div class="uc-sub">The AI Assistant is being configured and will be available soon for all JB engineers.</div>
+    <div class="uc-badge"><div class="uc-badge-dot"></div> COMING SOON</div>
+    <div class="uc-features">
+      <div class="uc-feature"><span class="uc-feature-icon">💬</span>Free-text fault diagnosis chat</div>
+      <div class="uc-feature"><span class="uc-feature-icon">📊</span>ZMS optical readings analyser</div>
+      <div class="uc-feature"><span class="uc-feature-icon">🎯</span>Realistic scenario training</div>
+      <div class="uc-feature"><span class="uc-feature-icon">🤖</span>Ask AI about any fault resolution</div>
+    </div>
+    <div class="uc-divider"></div>
+    <div class="uc-note">All other features — Fault Finder, Modules, Alarm Reference, Checklist and Quiz — are fully available now.</div>
+  </div>
+</div>
+
+</div>
+
+<nav class="bottom-nav">
+  <div class="nav-tab active" id="nav-home" onclick="showScreen('home',null,'nav-home')"><span class="nav-icon">🏠</span><span>Home</span></div>
+  <div class="nav-tab" id="nav-search" onclick="showScreen('search',null,'nav-search')"><span class="nav-icon">🔍</span><span>Fault Finder</span></div>
+  <div class="nav-tab" id="nav-modules" onclick="showScreen('modules',null,'nav-modules')"><span class="nav-icon">📚</span><span>Modules</span></div>
+  <div class="nav-tab" id="nav-alarms" onclick="showScreen('alarms',null,'nav-alarms')"><span class="nav-icon">🔔</span><span>Alarms</span></div>
+  <div class="nav-tab" id="nav-checklist" onclick="showScreen('checklist',null,'nav-checklist')"><span class="nav-icon">✅</span><span>Checklist</span></div>
+  <div class="nav-tab" id="nav-ai" onclick="showScreen('ai',null,'nav-ai')" style="position:relative"><span class="nav-icon">🤖</span><span>AI Chat</span><span style="position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--warn);border:1px solid var(--bg)"></span></div>
+</nav>
+<script>
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function showScreen(id, desktopEl, navId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('screen-' + id);
+  if (el) { el.classList.add('active'); window.scrollTo(0,0); }
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const navEl = navId ? document.getElementById(navId) : document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+  document.querySelectorAll('.d-nav-item').forEach(t => t.classList.remove('active'));
+  if (desktopEl) desktopEl.classList.add('active');
+  if (id === 'alarms') renderAlarms('');
+  if (id === 'checklist') renderChecklist();
+  if (id === 'quiz') { if(window._quizStarted === undefined) window._quizStarted = false; renderQuiz(); }
+  if (id === 'modules') { if(!document.getElementById('refArea').innerHTML){ document.getElementById('modListWrap').style.display=''; } }
+}
+function toggleTip(el) { el.classList.toggle('open'); }
+
+// ═══════════════════════════════════════
+// SEARCH INDEX
+// ═══════════════════════════════════════
+const searchIndex = [
+  {q:'no light red led los fibre break no signal optical dead pon',id:'los',icon:'🔴',title:'No Optical Signal (LOS)',sub:'PON LED red or off — fibre fault',sev:'CRITICAL',cls:'b-crit'},
+  {q:'alarm flashing red rogue ont laser stuck upstream corruption multiple customers neighbours',id:'rogue',icon:'🚨',title:'Flashing Red ALARM / Rogue ONT',sub:'ONT laser fault disrupting the PON',sev:'CRITICAL',cls:'b-crit'},
+  {q:'not registering flashing green wont go solid sufi serial number authentication',id:'noreg',icon:'🟠',title:'ONT Not Registering',sub:'Signal present but won\'t authenticate',sev:'MAJOR',cls:'b-maj'},
+  {q:'intermittent drops random disconnects cuts out unstable goes off comes back',id:'intermittent',icon:'🟡',title:'Intermittent Drops',sub:'Random disconnections',sev:'MAJOR',cls:'b-maj'},
+  {q:'no service wan down internet pon green broadband provisioning vlan',id:'noservice',icon:'📵',title:'No Service / WAN Down',sub:'ONT registered but no internet',sev:'MAJOR',cls:'b-maj'},
+  {q:'slow speed slow broadband fast speeds low throughput performance',id:'slow',icon:'🐌',title:'Slow Broadband Speeds',sub:'Performance degraded',sev:'MINOR',cls:'b-min'},
+  {q:'dead all off no power dgi dying gasp hardware alarm led',id:'power',icon:'⚡',title:'Power / Hardware Fault',sub:'ONT completely dead or ALARM LED on',sev:'MAJOR',cls:'b-maj'},
+  {q:'no phone no dial tone voip pots sip telephone call',id:'voip',icon:'📞',title:'VoIP / POTS Fault',sub:'No dial tone or call quality issues',sev:'MINOR',cls:'b-min'},
+  {q:'bip errors error counters quality degraded gpon frame',id:'bip',icon:'📉',title:'BIP Error Counters',sub:'Optical quality diagnostics in ZMS',sev:'INFO',cls:'b-info'},
+  {q:'apc upc connector wrong type mismatch green blue loss angle',id:'connectors',icon:'🔌',title:'APC vs UPC Connectors',sub:'Connector mismatch causes high loss',sev:'CRITICAL',cls:'b-crit'},
+  {q:'water rain weather temperature overheating hot cold seasonal rodent',id:'environmental',icon:'🌧️',title:'Environmental Faults',sub:'Water, heat, cold, physical damage',sev:'MAJOR',cls:'b-maj'},
+  {q:'zms software find ont alarm provision reboot firmware navigate',id:'zms',icon:'🖥️',title:'ZMS Platform Guide',sub:'Network management system walkthrough',sev:'INFO',cls:'b-info'},
+];
+
+function handleSearch(val) {
+  // Single clean implementation — lives in same script block as searchIndex
+  // so const searchIndex is always in scope. No override chain needed.
+  clearTimeout(window._searchTimeout);
+  const clear = document.getElementById('searchClear');
+  const sugg  = document.getElementById('searchSugg');
+  const def   = document.getElementById('searchDefault');
+  const wiz   = document.getElementById('wizardWrap');
+
+  if (clear) clear.classList.toggle('show', val.length > 0);
+
+  if (!val.trim()) {
+    if (sugg) sugg.classList.remove('show');
+    if (def)  def.style.display = '';
+    return;
+  }
+
+  if (wiz && wiz.classList.contains('show')) return;
+  if (def) def.style.display = 'none';
+
+  window._searchTimeout = setTimeout(function() {
+    if (!sugg) return;
+    var v = val.toLowerCase();
+    var results = searchIndex.filter(function(item) {
+      return item.q.includes(v) ||
+             item.title.toLowerCase().includes(v) ||
+             item.sub.toLowerCase().includes(v);
+    }).slice(0, 6);
+
+    if (!results.length) {
+      sugg.innerHTML = '<div class="empty-state"><div class="ei">🤔</div>'
+        + '<p>No match. Try: "red light", "no internet", "flashing alarm"</p></div>';
+      sugg.classList.add('show');
+      return;
+    }
+
+    sugg.innerHTML = results.map(function(r) {
+      var hl = val.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      var re = new RegExp('(' + hl + ')', 'gi');
+      var title = r.title.replace(re, '<span class="sug-highlight">$1</span>');
+      return '<div class="suggestion-item" onclick="startWizard(\'' + r.id + '\')">'
+        + '<div class="sug-icon">' + r.icon + '</div>'
+        + '<div class="sug-text"><strong>' + title + '</strong>'
+        + '<span>' + r.sub + '</span></div>'
+        + '<span class="sug-badge ' + r.cls + '">' + r.sev + '</span>'
+        + '</div>';
+    }).join('');
+    sugg.classList.add('show');
+  }, 120);
+}
+function clearSearch() {
+  document.getElementById('faultSearch').value='';
+  document.getElementById('searchClear').classList.remove('show');
+  document.getElementById('searchSugg').classList.remove('show');
+  document.getElementById('searchDefault').style.display='';
+  document.getElementById('faultSearch').focus();
+}
+
+// ═══════════════════════════════════════
+// WIZARD DEFINITIONS
+// ═══════════════════════════════════════
+const wizards = {
+  los:{icon:'🔴',title:'No Optical Signal (LOS)',sub:'PON LED red or off',
+    start:{q:'Is the POWER LED on the ONT solid green?',ctx:'Look at the front panel. Power LED should be solid green if the ONT has mains power.',
+      opts:[{icon:'🟢',label:'Yes — Power LED is green',sub:'ONT has power, optical fault likely',next:'los_power'},
+            {icon:'⚫',label:'No — All LEDs are off',sub:'No power reaching ONT',res:'power_psu'}]}},
+  los_power:{q:'Are multiple customers on the same PON port also offline in ZMS?',ctx:'ZMS → [OLT] → [Card] → [PON Port] → count how many ONTs show offline simultaneously.',
+    opts:[{icon:'👥',label:'Yes — Multiple customers offline',sub:'Network-side fault upstream of splitter',res:'los_network'},
+          {icon:'👤',label:'No — Only this customer',sub:'Customer-side drop fibre or ONT fault',next:'los_single'}]},
+  los_single:{q:'What does ZMS show as the alarm for this ONT?',ctx:'ZMS → Alarms → Active Alarms → filter by this ONT serial number.',
+    opts:[{icon:'🔴',label:'LOSi — Loss of Signal (this ONT)',sub:'OLT gets no upstream signal from this ONT',res:'los_customer'},
+          {icon:'📊',label:'SDi — Signal Degrade',sub:'Signal present but below threshold',res:'los_degrade'},
+          {icon:'❓',label:'No alarm or unclear',sub:'Check optical stats manually',res:'los_customer'}]},
+
+  rogue:{icon:'🚨',title:'Flashing Red ALARM / Rogue ONT',sub:'Upstream interference',
+    start:{q:'Which LED is flashing red?',ctx:'Identify exactly which LED on the ONT front panel is flashing red.',
+      opts:[{icon:'🚨',label:'ALARM LED (dedicated alarm indicator)',sub:'Hardware or rogue fault on this ONT',next:'rogue_alarm'},
+            {icon:'🔴',label:'PON LED (optical connection LED)',sub:'Optical signal loss — likely victim not culprit',next:'rogue_pon'}]}},
+  rogue_alarm:{q:'Does ZMS show a GPON_ONU_LEVEL_ROGUE_ALARM or GPON_OLT_ROGUE_ONU_ALARM?',ctx:'ZMS → Alarms → Active. Search by this ONT serial number.',
+    opts:[{icon:'⚠️',label:'Yes — Rogue alarm confirmed in ZMS',sub:'This ONT IS the rogue — act now',res:'rogue_confirmed'},
+          {icon:'❓',label:'No alarm or unclear',sub:'May still be rogue — check PON port',next:'rogue_check'}]},
+  rogue_pon:{q:'Are other customers on the same PON port also dropping or offline?',ctx:'Check ZMS PON port view. Multiple simultaneous LOSi alarms = rogue pattern.',
+    opts:[{icon:'👥',label:'Yes — Multiple customers affected',sub:'Classic rogue pattern — need to find culprit',res:'rogue_victim'},
+          {icon:'👤',label:'No — Only this customer',sub:'Standard LOS fault at this property',res:'los_customer'}]},
+  rogue_check:{q:'In ZMS Alarm History, do multiple ONTs on the same PON port show LOSi at exactly the same timestamps?',ctx:'ZMS → Alarms → Alarm History → filter by OLT/PON port, last 7 days. Look for LOSi events on multiple serials at the same time.',
+    opts:[{icon:'⚠️',label:'Yes — Multiple LOSi at matching timestamps',sub:'Rogue ONT confirmed on this PON port',res:'rogue_victim'},
+          {icon:'✅',label:'No — Only this ONT has alarms',sub:'Standard hardware or optical fault',res:'power_alarm'}]},
+
+  noreg:{icon:'🟠',title:'ONT Not Registering',sub:'Signal present but won\'t authenticate',
+    start:{q:'What is the Rx optical power reading in ZMS?',ctx:'ZMS → ONT → Statistics → Optical → Rx Power (dBm).',
+      opts:[{icon:'✅',label:'-18 to -26 dBm — Power is acceptable',sub:'Signal OK — registration logic issue',next:'noreg_goodpow'},
+            {icon:'⚠️',label:'Below -26 dBm or very low',sub:'Marginal signal causing SUFI failure',res:'los_degrade'},
+            {icon:'❓',label:'N/A or cannot read',sub:'ONT not visible in ZMS at all',next:'noreg_notfound'}]}},
+  noreg_goodpow:{q:'Does the serial number in ZMS exactly match the label on the physical ONT?',ctx:'Compare character-by-character. Label is on the bottom or side of the ONT. Even one wrong character prevents registration.',
+    opts:[{icon:'❌',label:'No — Serial number mismatch',sub:'Update serial in ZMS — this is the fix',res:'noreg_serial'},
+          {icon:'✅',label:'Yes — Serials match exactly',sub:'Check provisioning and firmware',next:'noreg_prov'}]},
+  noreg_prov:{q:'Does the ONT have a service template applied in ZMS?',ctx:'ZMS → ONT Record → Services tab. Should show an active service profile.',
+    opts:[{icon:'❌',label:'No service template applied',sub:'ONT discovered but not provisioned',res:'noreg_noprofile'},
+          {icon:'✅',label:'Template applied',sub:'Check firmware compatibility',res:'noreg_firmware'}]},
+  noreg_notfound:{q:'Can you see the ONT as DISCOVERED in ZMS under the PON port?',ctx:'ZMS → [OLT] → [Card] → [PON Port] → ONT list. Look for any DISCOVERED or UNPROVISIONED entry.',
+    opts:[{icon:'✅',label:'Yes — shows as DISCOVERED',sub:'ONT detected but not yet provisioned',res:'noreg_noprofile'},
+          {icon:'❌',label:'No — ONT not visible at all',sub:'No upstream signal reaching OLT',res:'los_customer'}]},
+
+  intermittent:{icon:'🟡',title:'Intermittent Drops',sub:'Random disconnections',
+    start:{q:'When does the fault typically occur?',ctx:'This one question narrows the root cause before any physical investigation.',
+      opts:[{icon:'🌧️',label:'During or after rain / wet weather',sub:'Water ingress at CTU or connectors',res:'env_water'},
+            {icon:'🌡️',label:'Hot weather or at certain times of day',sub:'ONT overheating or thermal cycling',res:'env_temp'},
+            {icon:'🎲',label:'Completely random — no pattern',sub:'Connector degradation or marginal power',next:'intermittent_zms'}]}},
+  intermittent_zms:{q:'What does ZMS Alarm History show for this ONT over the last 7 days?',ctx:'ZMS → Alarms → Alarm History → filter by ONT serial, last 7 days.',
+    opts:[{icon:'🔴',label:'Repeated LOSi alarms',sub:'Intermittent optical signal loss',res:'intermittent_los'},
+          {icon:'📊',label:'SDi (Signal Degrade) alarms',sub:'Marginal optical quality',res:'los_degrade'},
+          {icon:'🔄',label:'Repeated ONU_REBOOTED alarms',sub:'ONT rebooting unexpectedly',next:'intermittent_reboot'},
+          {icon:'⚡',label:'DOWi (Drift of Window) alarms',sub:'Upstream timing drift — potential rogue',res:'rogue_victim'}]},
+  intermittent_reboot:{q:'What temperature does ZMS show for this ONT?',ctx:'ZMS → ONT → System Information → Temperature field.',
+    opts:[{icon:'🔥',label:'Above 65°C or ONT in enclosed space',sub:'Overheating causing resets',res:'env_temp'},
+          {icon:'✅',label:'Normal (below 55°C)',sub:'Check PSU and optical quality',res:'intermittent_psu'}]},
+
+  noservice:{icon:'📵',title:'No Service / WAN Down',sub:'ONT registered but no internet',
+    start:{q:'What is the LAN1 LED status on the ONT?',ctx:'Check the LED labelled LAN1 or GE1 on the front of the ONT.',
+      opts:[{icon:'⚫',label:'LAN1 LED is off — no link',sub:'Ethernet issue between ONT and router',res:'noservice_eth'},
+            {icon:'🟢',label:'LAN1 LED is on — link present',sub:'Ethernet OK — check provisioning',next:'noservice_zms'}]}},
+  noservice_zms:{q:'What does ZMS show for the ONT data service status?',ctx:'ZMS → ONT → Services tab. Check if data service shows Active.',
+    opts:[{icon:'❌',label:'No service configured or Inactive',sub:'Service not provisioned or wrong template',res:'noservice_prov'},
+          {icon:'✅',label:'Service shows Active in ZMS',sub:'Config OK — check router',res:'noservice_router'}]},
+
+  slow:{icon:'🐌',title:'Slow Broadband Speeds',sub:'Performance degraded',
+    start:{q:'Have you run a wired speed test directly from the ONT LAN1 port?',ctx:'Connect a laptop directly to ONT LAN1 with Ethernet. This eliminates WiFi as a variable.',
+      opts:[{icon:'❌',label:'Not yet — speed test via WiFi only',sub:'WiFi may be the issue, not the ONT',res:'slow_wifi'},
+            {icon:'🟢',label:'Yes — wired test also shows slow',sub:'Genuine ONT/network speed issue',next:'slow_zms'}]}},
+  slow_zms:{q:'What is the Rx power in ZMS?',ctx:'ZMS → ONT → Statistics → Optical → Rx Power.',
+    opts:[{icon:'⚠️',label:'Below -24 dBm (marginal)',sub:'Optical quality causing packet loss',res:'los_degrade'},
+          {icon:'✅',label:'-18 to -24 dBm (acceptable)',sub:'Optical OK — check bandwidth profile',next:'slow_bw'}]},
+  slow_bw:{q:'Does the ZMS bandwidth profile match the customer\'s package?',ctx:'ZMS → ONT → Services → Bandwidth Profile. Check CIR/PIR values.',
+    opts:[{icon:'❌',label:'Wrong profile / lower than subscribed',sub:'Bandwidth profile misconfigured',res:'slow_profile'},
+          {icon:'✅',label:'Profile matches package',sub:'Check BIP errors for quality issues',res:'slow_bip'}]},
+
+  power:{icon:'⚡',title:'Power / Hardware Fault',sub:'ONT dead or hardware alarm',
+    start:{q:'Are any LEDs lit on the ONT at all?',ctx:'Check ALL LEDs carefully — even a faint glow counts.',
+      opts:[{icon:'⚫',label:'No — completely dark, no LEDs at all',sub:'No power reaching ONT',next:'power_nopower'},
+            {icon:'🔴',label:'ALARM LED solid or flashing red',sub:'ONT powered but hardware fault detected',res:'power_alarm'}]}},
+  power_nopower:{q:'Does the mains socket have power?',ctx:'Test with a phone charger or mains socket tester.',
+    opts:[{icon:'❌',label:'No — socket dead or breaker tripped',sub:'Mains power issue at premises',res:'power_mains'},
+          {icon:'✅',label:'Yes — socket has power',sub:'ONT power supply/PSU adapter fault',res:'power_psu'}]},
+
+  voip:{icon:'📞',title:'VoIP / POTS Fault',sub:'No dial tone or call issues',
+    start:{q:'Is the broadband internet also working?',ctx:'VoIP runs over the broadband service. A data fault will also kill voice.',
+      opts:[{icon:'❌',label:'No — internet also down',sub:'Fix broadband first — voice will auto-recover',res:'voip_fixbb'},
+            {icon:'✅',label:'Yes — broadband working fine',sub:'Voice-specific fault',next:'voip_sip'}]}},
+  voip_sip:{q:'What does SIP status show in ZMS?',ctx:'ZMS → ONT → Services → Voice. Check the SIP Registration Status field.',
+    opts:[{icon:'❌',label:'UNREGISTERED or error',sub:'SIP cannot reach KCOM voice platform',res:'voip_unreg'},
+          {icon:'✅',label:'REGISTERED',sub:'SIP OK — check physical phone line',next:'voip_physical'},
+          {icon:'❓',label:'No voice service configured',sub:'Voice not provisioned on this ONT',res:'voip_noprov'}]},
+  voip_physical:{q:'Does a phone plugged directly into TEL1 on the ONT have dial tone?',ctx:'Bypass all internal house wiring. Plug a known-good phone directly into the TEL1 port on the back of the ONT.',
+    opts:[{icon:'✅',label:'Yes — dial tone at ONT TEL1',sub:'Internal house wiring fault — not KCOM scope',res:'voip_wiring'},
+          {icon:'❌',label:'No — no dial tone at TEL1 either',sub:'ONT FXS port or codec issue',res:'voip_fxs'}]},
+};
+
+// ═══════════════════════════════════════
+// RESOLUTIONS
+// ═══════════════════════════════════════
+const resolutions = {
+  los_customer:{title:'Customer-Side LOS — Fibre Fault',sev:'CRITICAL',icon:'🔴',sevCls:'b-crit',tip:'⚡ Quick win: Re-seat the SC/APC connector first. Takes 5 seconds and fixes ~30% of LOS calls.',
+    steps:[
+      {n:1,title:'Re-seat the SC/APC connector at ONT',body:'The green SC/APC connector on the rear of the ONT must be fully clicked in. Push firmly until it latches. Even 1mm of withdrawal causes LOS. <b>Never look into the port.</b>',expand:'The SC connector has a spring-loaded latch. If it rattles or feels loose, clean the end face and re-seat. A partially inserted connector is the single most common quick LOS fix on site.'},
+      {n:2,title:'Clean all SC/APC connectors',body:'Use a push-through dry cleaner on the ONT optical port and a reel cleaner on the male connector. Inspect with a fibre scope. Contamination can add up to 10 dB of loss.',expand:'Clean order: male connector first with reel/swab, then female adapter port with push-through. Inspect after cleaning — never mate until end face is visually clean. Even fingerprints cause total LOS.'},
+      {n:3,title:'Check internal fibre run to CTU',body:'Trace fibre from ONT to the external CTU. Look for: bends tighter than 3cm, kinks, staples through the cable, pinch points at door frames, or visible damage.',expand:'Focus on: skirting board clips (overtightened = crushed fibre), corners around door frames, any wall/floor penetration points. Use a VFL to see exactly where light leaks.'},
+      {n:4,title:'Inspect the CTU (external box)',body:'Open the CTU. Check for water ingress, condensation, corrosion, or damaged seals. Use a power meter to measure power at CTU output — if power present here but not at ONT, internal run is the fault.',expand:'Good CTU reading: -18 to -22 dBm. If power present at CTU but ONT shows LOS, the fault is definitely between CTU and ONT — the internal patchlead or ONT connector.'},
+      {n:5,title:'Power cycle the ONT',body:'Remove power for 30 seconds, reapply. Wait 90 seconds. PON LED should flash during ranging then go solid green. Confirm ONT shows ONLINE in ZMS.',expand:''},
+      {n:6,title:'If still LOS — escalate',body:'No power measurable at CTU output = upstream fault (drop fibre, splitter, feeder, OLT). Log in KCOM systems with: ONT serial, OLT name, PON port, LOSi timestamp, CTU power reading.',expand:''}
+    ]},
+  los_network:{title:'Network-Side LOS — Escalate Immediately',sev:'CRITICAL',icon:'📡',sevCls:'b-crit',tip:'📞 Call NOC immediately — multiple customers are affected. Do not spend time at individual premises.',
+    steps:[
+      {n:1,title:'Confirm multiple customers affected',body:'ZMS → OLT → PON Port → count offline ONTs. More than one = network fault upstream of splitter. This is not a customer-side issue.',expand:''},
+      {n:2,title:'Do NOT work at this customer\'s premises',body:'Any work here will not fix this fault. Inform the customer this is a network issue, not their equipment.',expand:''},
+      {n:3,title:'Escalate to KCOM NOC',body:'Call NOC with: OLT name, PON port number, number of affected customers, fault start time (ZMS alarm timestamp), alarm type (LOS vs LOSi).',expand:''},
+      {n:4,title:'Check for rogue ONT while waiting',body:'If the LOS keeps clearing and returning, one ONT may be a rogue. Check ZMS for GPON_OLT_ROGUE_ONU_ALARM on the port.',expand:''}
+    ]},
+  los_degrade:{title:'Signal Degraded — Marginal Optical Quality',sev:'MAJOR',icon:'📊',sevCls:'b-maj',tip:'🔍 Dirty connectors are the #1 cause of signal degradation. Clean first, measure after.',
+    steps:[
+      {n:1,title:'Record exact Rx power from ZMS',body:'ZMS → ONT → Statistics → Optical. Note the Rx power value. -22 to -26 dBm = marginal. Below -27 dBm = fault threshold. Check the performance graph for trend.',expand:'Gradual downward trend = progressive contamination or ageing connector. Sudden drop = physical event. Spikes = intermittent connector disturbance.'},
+      {n:2,title:'Clean all connectors in the path',body:'Clean SC/APC at ONT optical port and at CTU. Inspect with fibre scope. Also check for APC/UPC mismatch — a blue (UPC) patchlead on an APC port adds 3–8 dB silently.',expand:''},
+      {n:3,title:'Check BIP error counters',body:'ZMS → ONT → Statistics → GTC. Reset counters (Actions → Clear Statistics) and watch rate over 5 minutes. Rising BIP = active quality problem right now.',expand:''},
+      {n:4,title:'Inspect full fibre route for bends',body:'Walk the route from CTU to ONT. Look for bends tighter than 3cm, overtightened cable clips, or fibre behind furniture. Even gentle sustained bends add 1–3 dB.',expand:''},
+      {n:5,title:'Monitor after intervention',body:'After cleaning, recheck Rx power in ZMS. Should improve toward -18 to -22 dBm. BIP errors should drop to near zero. If power improved but still low, OTDR the path.',expand:''}
+    ]},
+  rogue_confirmed:{title:'Rogue ONT — This Unit Is the Culprit',sev:'CRITICAL',icon:'🚨',sevCls:'b-crit',tip:'⚡ Disconnect fibre first — every second the rogue laser is active, your neighbours are down.',
+    steps:[
+      {n:1,title:'IMMEDIATELY disconnect the SC/APC fibre',body:'Remove the green SC/APC fibre connector from the back of the ONT. <b>Do not look into it.</b> This stops the rogue laser. Other customers on the PON port should recover within 60 seconds.',expand:'Watch ZMS after disconnecting — the GPON_OLT_ROGUE_ONU_ALARM should clear and neighbouring ONTs return ONLINE. This confirms the culprit.'},
+      {n:2,title:'Confirm other customers recover in ZMS',body:'Check Active Alarms — rogue alarm should clear. Check PON port view — neighbouring ONTs return to ONLINE. If not, there may be a second issue.',expand:''},
+      {n:3,title:'Power cycle (fibre disconnected)',body:'With fibre still disconnected, power off 60 seconds then back on. Reconnect fibre. If ALARM LED immediately lights red again and ZMS raises rogue alarm — hardware is faulty, must replace.',expand:'A power cycle resolves firmware crashes causing rogue behaviour. A stuck laser (hardware) will never recover from a power cycle.'},
+      {n:4,title:'Replace ONT if rogue returns',body:'The ONT\'s optical Tx module is hardware-faulty. Replace with identical model. ZMS: deregister old serial → install new unit → discover new serial → apply service template → synchronise.',expand:''},
+      {n:5,title:'Log root cause and report',body:'Document: serial number, fault type, customers affected, downtime duration, root cause. If multiple ONTs of same model going rogue, report to KCOM for potential firmware recall.',expand:''}
+    ]},
+  rogue_victim:{title:'Rogue ONT Elsewhere — You Are at the Wrong House',sev:'CRITICAL',icon:'🔍',sevCls:'b-crit',tip:'🏠 The house you\'re at is the victim. The culprit is at a different address — find it in ZMS.',
+    steps:[
+      {n:1,title:'Do not work at this property',body:'This customer is a victim of a rogue ONT at a different property. Working here will not fix the fault.',expand:''},
+      {n:2,title:'Find culprit via ZMS alarm history',body:'ZMS → Alarms → Active → look for GPON_OLT_ROGUE_ONU_ALARM. Also check Alarm History for the PON port — the ONT with the most DOWi (Drift of Window) events before the multi-customer LOSi events is your prime suspect.',expand:'DOWi repeatedly on one serial before mass LOSi = that serial is likely the culprit. Its timing drift escalated to full rogue behaviour.'},
+      {n:3,title:'Deactivate suspects via ZMS one at a time',body:'ZMS → [Suspect ONT] → Actions → Disable ONT. After each deactivation, watch Active Alarms. If the rogue alarm clears and victim ONTs return ONLINE — found it.',expand:'Priority order: (1) ONTs with DOWi or rogue alarms, (2) ONTs with recent firmware issues, (3) Recently installed or replaced ONTs.'},
+      {n:4,title:'Arrange field visit to culprit property',body:'Once identified: visit the rogue ONT premises, disconnect fibre, power cycle. If rogue returns — replace ONT.',expand:''}
+    ]},
+  noreg_serial:{title:'Serial Number Mismatch — Quick Fix',sev:'MAJOR',icon:'🔢',sevCls:'b-maj',tip:'🔢 Serial mismatch is the most common cause of SUFI alarms after an ONT replacement.',
+    steps:[
+      {n:1,title:'Confirm physical serial number',body:'Find the white label on the bottom or side of the ONT. Note every character exactly. Typically 12 characters starting with vendor ID (e.g. ZNID).',expand:''},
+      {n:2,title:'Update serial in ZMS',body:'ZMS → [ONT Record] → Edit → Serial Number → enter correct serial → Save. Or: ZMS → PON Port → find DISCOVERED entry with new serial → assign existing service profile.',expand:'If replacing an ONT: deregister old entry first. ZMS → [Old ONT] → Actions → Deregister. New ONT appears as DISCOVERED with its correct serial.'},
+      {n:3,title:'Power cycle and verify',body:'After updating serial in ZMS, power cycle the ONT. PON LED should flash during ranging then go solid green. Confirm ONLINE in ZMS and test service.',expand:''}
+    ]},
+  noreg_noprofile:{title:'Service Template Not Applied',sev:'MAJOR',icon:'⚙️',sevCls:'b-maj',tip:'⚙️ The ONT has signal and is discovered — it just needs its service profile applied in ZMS.',
+    steps:[
+      {n:1,title:'Find ONT in DISCOVERED state',body:'ZMS → [OLT] → [Card] → [PON Port] → ONT list. New ONT appears as DISCOVERED with its serial number.',expand:''},
+      {n:2,title:'Apply service template',body:'Click DISCOVERED ONT → Services → Apply Template → select correct template for customer\'s package (e.g. KCOM-Lightstream-900) → assign to GE1 (LAN1).',expand:'Template configures: VLAN, bandwidth profile (CIR/PIR), GEM port mapping, LAN port assignment. Wrong template = wrong speeds or no service.'},
+      {n:3,title:'Synchronise and verify',body:'ZMS → ONT → Actions → Synchronize. PON LED goes solid green. ZMS status: ONLINE. Services tab: Active. Test internet connectivity.',expand:''}
+    ]},
+  noreg_firmware:{title:'Firmware Incompatibility',sev:'MAJOR',icon:'📥',sevCls:'b-maj',tip:'📥 Check with NOC if multiple ONTs of the same model are failing to register simultaneously — may indicate a batch issue.',
+    steps:[
+      {n:1,title:'Check firmware version in ZMS',body:'ZMS → ONT → System Information → Firmware Version. Note the current version number.',expand:''},
+      {n:2,title:'Initiate firmware upgrade via ZMS',body:'ZMS → ONT → Actions → Upgrade Firmware → select latest approved version → Confirm. Takes 5–10 minutes. ONT reboots automatically when complete.',expand:'If ONT won\'t register at all, try: ZMS → Actions → Factory Reset, then re-provision. A factory reset removes all OMCI config and lets the ONT re-negotiate cleanly.'},
+      {n:3,title:'Re-provision if needed',body:'After upgrade and reboot, verify service template is still applied. Re-apply if needed and synchronise.',expand:''}
+    ]},
+  noservice_eth:{title:'Ethernet Link Fault — ONT to Router',sev:'MINOR',icon:'🔌',sevCls:'b-min',tip:'🔌 Always try a new Ethernet cable first. Takes 30 seconds and fixes more jobs than you\'d expect.',
+    steps:[
+      {n:1,title:'Swap the Ethernet cable',body:'Replace the Ethernet cable between ONT LAN1 and router WAN port with a known-good cable (Cat5e or better). A single broken wire pair kills the link.',expand:'Even a cable that looks fine may have a broken pin. Ethernet cables are the most overlooked fault. Always swap before investigating further.'},
+      {n:2,title:'Check both port LEDs',body:'After swapping: ONT LAN1 LED should light green. Router WAN port LED should light. If neither lights with new cable, try a different ONT LAN port.',expand:''},
+      {n:3,title:'Check router WAN settings',body:'KCOM Lightstream uses DHCP on router WAN (not PPPoE). Router should obtain a KCOM IP address automatically.',expand:''}
+    ]},
+  noservice_prov:{title:'Service Not Provisioned Correctly',sev:'MAJOR',icon:'⚙️',sevCls:'b-maj',tip:'⚙️ A sync often fixes provisioning issues without needing a full re-provision. Try sync first.',
+    steps:[
+      {n:1,title:'Check service status in ZMS',body:'ZMS → ONT → Services tab. Status must = Active. Check: VLAN correct, bandwidth profile correct, assigned to GE1.',expand:'ZMS → [ONT] → Services → Data Service\n  Status: ACTIVE ✓\n  VLAN: [correct] ✓\n  LAN Port: GE1 ✓\n  Bandwidth Profile: [correct] ✓'},
+      {n:2,title:'Run configuration sync',body:'ZMS → ONT → Actions → Synchronize Configuration. Re-pushes the service template via OMCI without full reprovision.',expand:''},
+      {n:3,title:'Re-apply template if sync fails',body:'ZMS → ONT → Services → Remove service → Apply Template → reselect correct template → Save → Synchronize. Wait 60 seconds then test.',expand:''}
+    ]},
+  noservice_router:{title:'Router Configuration Issue',sev:'MINOR',icon:'📡',sevCls:'b-min',tip:'📡 Change router WAN type to DHCP if set to PPPoE. Most common cause of "false" no-service calls.',
+    steps:[
+      {n:1,title:'Confirm ONT service is Active in ZMS',body:'ZMS → ONT → Services. Status must show ACTIVE. If active, fault is between ONT and router.',expand:''},
+      {n:2,title:'Check router WAN mode',body:'KCOM Lightstream uses DHCP on WAN (not PPPoE). Check router admin (usually 192.168.1.1) → WAN type = DHCP/Dynamic IP.',expand:'If set to PPPoE, the router will never get an IP. Change to DHCP — router should get KCOM IP within 30 seconds.'},
+      {n:3,title:'Reboot router and test',body:'Power off router 30 seconds, back on. Check WAN page for KCOM IP address. Run speed test.',expand:''}
+    ]},
+  slow_wifi:{title:'Likely WiFi Issue — Not ONT/GPON',sev:'MINOR',icon:'📶',sevCls:'b-min',tip:'📶 Always test wired before investigating the ONT. WiFi issues account for the majority of "slow broadband" calls.',
+    steps:[
+      {n:1,title:'Run wired speed test to confirm',body:'Connect laptop directly to ONT LAN1 with Ethernet. Run speed test. If wired speed is correct, the problem is WiFi — not the ONT or fibre.',expand:'WiFi can reduce perceived speed by 50–90% depending on distance, walls, interference, router age, and number of devices.'},
+      {n:2,title:'If wired speed also low',body:'Return to fault finder and select the slow speeds option, then choose "Yes — wired test also shows slow".',expand:''},
+      {n:3,title:'WiFi tips for customer',body:'Router placement: central, elevated, not in a cupboard. Check 2.4GHz vs 5GHz. Consider a mesh WiFi system.',expand:''}
+    ]},
+  slow_profile:{title:'Wrong Bandwidth Profile in ZMS',sev:'MINOR',icon:'📊',sevCls:'b-min',tip:'📊 Wrong bandwidth profiles are silent limiters — everything looks fine except the CIR/PIR values.',
+    steps:[
+      {n:1,title:'Check and correct bandwidth profile',body:'ZMS → ONT → Services → Data Service → Bandwidth Profile. The CIR and PIR must match the customer\'s package.',expand:'Example:\n  Profile: KCOM-Lightstream-900\n  CIR: 900 Mbps\n  PIR: 900 Mbps\nIf wrong profile (e.g. 150Mbps applied to 900Mbps customer), they are hard-limited regardless of signal quality.'},
+      {n:2,title:'Apply correct profile and sync',body:'Edit service → change bandwidth profile → Save → Actions → Synchronize. Wait 60 seconds and re-test.',expand:''}
+    ]},
+  slow_bip:{title:'BIP Errors Causing Packet Loss',sev:'MAJOR',icon:'📉',sevCls:'b-maj',tip:'📉 BIP errors are the hidden cause of many slow speed calls where optical power looks fine.',
+    steps:[
+      {n:1,title:'Reset and monitor BIP counters',body:'ZMS → ONT → Actions → Clear Statistics. Wait 5 minutes. ZMS → ONT → Statistics → GTC. If BIP errors are climbing fast — optical quality is causing packet loss.',expand:'Even Rx power at -23 dBm can have high BIP errors with a partially contaminated connector. BIP errors cause TCP retransmissions which reduce throughput significantly.'},
+      {n:2,title:'Clean all connectors',body:'Clean SC/APC at ONT and CTU. Inspect with scope. Re-check BIP counters after cleaning — should drop to near-zero.',expand:''},
+      {n:3,title:'Check for APC/UPC mismatch',body:'Inspect all connector colours in the path. Any blue (UPC) connector in an APC path must be replaced.',expand:''},
+      {n:4,title:'If BIP errors persist after cleaning',body:'OTDR the internal fibre path. A micro-bend, damaged splice, or partially crushed fibre may not show on a power meter but generates ongoing bit errors.',expand:''}
+    ]},
+  power_mains:{title:'Mains Power Issue at Premises',sev:'MAJOR',icon:'🔌',sevCls:'b-maj',tip:'⚡ Test mains socket first — always rule out the simplest cause before touching any kit.',
+    steps:[
+      {n:1,title:'Test the mains socket',body:'Use a mains socket tester or plug in a phone charger. Check the fuse board — a tripped breaker cuts power to a whole circuit.',expand:''},
+      {n:2,title:'Restore mains power',body:'Reset tripped breaker if that was the cause. Faulty sockets require an electrician — outside KCOM scope.',expand:''},
+      {n:3,title:'ONT auto-recovers',body:'Once mains restored, ONT powers up automatically. DGi alarm in ZMS clears once ONT registers. Wait 90 seconds.',expand:''}
+    ]},
+  power_psu:{title:'PSU / Power Adapter Fault',sev:'MAJOR',icon:'🔋',sevCls:'b-maj',tip:'🔋 Carry a spare PSU adapter on every van. A cheap adapter resolves a surprising number of mystery DGi faults.',
+    steps:[
+      {n:1,title:'Try a known-good PSU adapter',body:'Replace ONT power adapter with a known-good spare (12V DC). If ONT powers up immediately — original PSU was faulty.',expand:'A failing PSU may still output some voltage but drops below ONT minimum operating voltage under load. Multimeter should read 12V DC. Below 10.5V or fluctuating = replace.'},
+      {n:2,title:'Check ZMS DGi alarm history',body:'Multiple DGi alarms over days/weeks with no customer-reported power outages = PSU progressively failing.',expand:''},
+      {n:3,title:'Verify after PSU swap',body:'ONT powers up → wait 90 seconds → ZMS shows ONLINE → no alarms → test internet.',expand:''}
+    ]},
+  power_alarm:{title:'Hardware Alarm — ONT ALARM LED Active',sev:'MAJOR',icon:'🛠️',sevCls:'b-maj',tip:'🌡️ Check temperature first — most ALARM LED activations are overheating. Moving the ONT often permanently fixes it.',
+    steps:[
+      {n:1,title:'Check ZMS for specific alarm',body:'ZMS → Active Alarms → filter by ONT serial. Look for: SELF_TEST_FAIL, GPON_ONU_LEVEL_ROGUE_ALARM, or high temperature alarm.',expand:''},
+      {n:2,title:'Check ONT temperature in ZMS',body:'ZMS → ONT → System Information → Temperature. Above 65°C = overheating. Move to cool, ventilated location. Allow 10 minutes to cool.',expand:''},
+      {n:3,title:'Power cycle',body:'Power off 60 seconds, back on. If ALARM LED clears and ZMS shows no alarms — transient fault (overtemp, firmware glitch). Monitor.',expand:''},
+      {n:4,title:'Replace ONT if alarm persists',body:'Persistent ALARM LED after power cycle = hardware fault. Replace with identical model. ZMS: deregister → install new unit → apply service template → synchronise.',expand:''}
+    ]},
+  env_water:{title:'Water Ingress — CTU or Connector',sev:'MAJOR',icon:'🌧️',sevCls:'b-maj',tip:'🌧️ Water faults dry out and look fine when you arrive. Always correlate ZMS alarm history timestamps with rainfall.',
+    steps:[
+      {n:1,title:'Inspect the CTU',body:'Open external CTU box. Look for: condensation, water droplets, white mineral deposits (dried water), green corrosion, damaged foam seals around cable entry.',expand:''},
+      {n:2,title:'Dry and clean the connector',body:'Dry CTU with dry cloth/tissue. Clean SC/APC connector with dry push-through cleaner. Allow to fully dry before reconnecting. Do not use compressed air.',expand:''},
+      {n:3,title:'Re-seal CTU cable entry',body:'Damaged entry seal allows recurring water ingress. Re-seal with outdoor sealant. Check lid seal integrity.',expand:''},
+      {n:4,title:'Check Rx power recovery in ZMS',body:'After drying and cleaning, Rx power should improve toward -18 to -22 dBm. If remains low, end face may be permanently damaged — replace patchlead.',expand:''}
+    ]},
+  env_temp:{title:'Temperature / Overheating Fault',sev:'MAJOR',icon:'🌡️',sevCls:'b-maj',tip:'🌡️ DOWi alarms during warm afternoons clearing overnight = classic overheating pattern.',
+    steps:[
+      {n:1,title:'Check ONT temperature in ZMS',body:'ZMS → ONT → System Information → Temperature. Above 65°C = overheating. Normal: 0–50°C for indoor DZS models.',expand:''},
+      {n:2,title:'Relocate or improve ventilation',body:'At least 10cm of clear space on all sides. Remove from enclosed cupboards, airing cupboards, or areas near boilers. No direct sunlight.',expand:''},
+      {n:3,title:'Monitor after relocation',body:'Temperature should drop within 15–20 minutes. DOWi alarms and reboot events should stop. If continues, check firmware version — some versions have thermal management bugs.',expand:''}
+    ]},
+  intermittent_los:{title:'Intermittent LOS — Optical Path Degradation',sev:'MAJOR',icon:'🟡',sevCls:'b-maj',tip:'🟡 Check ZMS optical history BEFORE touching anything — the power graph often reveals the cause.',
+    steps:[
+      {n:1,title:'Check optical power history in ZMS',body:'ZMS → ONT → Performance → Optical Rx History. Flat line with occasional drops = connector being disturbed. Gradual downward trend = progressive contamination.',expand:''},
+      {n:2,title:'Clean and inspect all connectors',body:'Clean SC/APC at ONT and CTU. Even partial contamination causes intermittent drops when temperature or vibration changes.',expand:''},
+      {n:3,title:'Check for mechanical disturbance',body:'Is the fibre near a door? Near a vibrating appliance? Near a cable that gets moved? Subtle movement causes intermittent drops.',expand:''},
+      {n:4,title:'Check BIP error history',body:'ZMS → ONT → Statistics → GTC. High historical BIP errors confirm the optical path has been intermittently corrupted.',expand:''},
+      {n:5,title:'OTDR if issue persists',body:'OTDR the internal fibre path if cleaning resolves nothing. A partially broken strand from a staple or impact shows as a reflective event at the damage point.',expand:''}
+    ]},
+  intermittent_psu:{title:'Intermittent PSU / Power Issue',sev:'MAJOR',icon:'🔋',sevCls:'b-maj',tip:'🔋 Intermittent reboots with no optical cause and no overheating = failing PSU adapter.',
+    steps:[
+      {n:1,title:'Swap the PSU adapter',body:'Replace with known-good 12V DC PSU. A failing PSU may work fine most of the time but drop voltage under load or with temperature changes.',expand:''},
+      {n:2,title:'Check mains power quality',body:'If other devices in the property also experience occasional issues, mains supply may have voltage fluctuations. Check with multimeter — should be stable 230V AC.',expand:''},
+      {n:3,title:'Monitor after PSU swap',body:'Watch ZMS for 24–48 hours. ONU_REBOOTED events should stop. If they continue, fault is likely thermal — see Environmental Faults module.',expand:''}
+    ]},
+  voip_fixbb:{title:'Fix Broadband First — VoIP Depends On It',sev:'MAJOR',icon:'📡',sevCls:'b-maj',tip:'📡 Never investigate VoIP before confirming broadband works. Fix broadband and voice auto-recovers.',
+    steps:[
+      {n:1,title:'Resolve broadband fault first',body:'VoIP on KCOM runs entirely over the broadband data service. If GPON data is down, voice is also down — there is no separate voice path.',expand:''},
+      {n:2,title:'VoIP auto-recovers',body:'Once GPON data service is restored and ONT registered, SIP re-registers automatically within 60–120 seconds.',expand:''},
+      {n:3,title:'Confirm SIP registration',body:'ZMS → ONT → Services → Voice → Status should show REGISTERED within 2 minutes of broadband recovery.',expand:''}
+    ]},
+  voip_unreg:{title:'SIP Unregistered — Voice Platform Issue',sev:'MAJOR',icon:'📞',sevCls:'b-maj',tip:'📞 Always sync voice profile before escalating — a missed sync is the most common cause.',
+    steps:[
+      {n:1,title:'Confirm broadband is working',body:'ONT data service must be ONLINE. If broadband is also down, fix that first.',expand:''},
+      {n:2,title:'Check voice profile in ZMS',body:'ZMS → ONT → Services → Voice. Verify: SIP server address, SIP username, FXS port assignment (TEL1), profile status.',expand:'SIP fields:\n  SIP Server: sip.kcom.co.uk\n  Username: [number@domain]\n  FXS Port: TEL1\n  Status: REGISTERED ← must show this'},
+      {n:3,title:'Re-sync voice profile',body:'ZMS → ONT → Actions → Synchronize. SIP should re-register within 60 seconds.',expand:''},
+      {n:4,title:'Escalate to NOC voice team if persists',body:'If broadband works, profile is correct, but SIP remains unregistered — escalate to NOC voice team with ONT serial and SIP credentials.',expand:''}
+    ]},
+  voip_noprov:{title:'Voice Service Not Provisioned',sev:'MAJOR',icon:'⚙️',sevCls:'b-maj',tip:'⚙️ A missing voice service is purely a provisioning job — ZMS only, no physical work needed.',
+    steps:[
+      {n:1,title:'Confirm voice is in customer\'s order',body:'Check customer account — do they subscribe to a telephone service? If no voice package, provisioning is not needed.',expand:''},
+      {n:2,title:'Apply voice service template in ZMS',body:'ZMS → ONT → Services → Add Service → Voice → apply correct KCOM VoIP profile → assign to TEL1 → set SIP credentials.',expand:''},
+      {n:3,title:'Synchronise and test',body:'ZMS → ONT → Actions → Synchronize. Wait 60 seconds. Voice status should show REGISTERED. Test dial tone at TEL1.',expand:''}
+    ]},
+  voip_wiring:{title:'Internal House Wiring Fault',sev:'MINOR',icon:'🏠',sevCls:'b-min',tip:'🏠 If dial tone is at TEL1 but not at sockets — it\'s house wiring, not a KCOM fault.',
+    steps:[
+      {n:1,title:'Confirm fault is in house wiring',body:'Dial tone is present at ONT TEL1 directly but not at phone socket. The fault is in the customer\'s internal telephone wiring.',expand:''},
+      {n:2,title:'Advise customer',body:'Internal telephone wiring is the customer\'s responsibility. Advise: (a) check other phone sockets, (b) try a different phone, (c) contact electrician if wiring needs replacing.',expand:''}
+    ]},
+  voip_fxs:{title:'ONT FXS Port / Codec Issue',sev:'MAJOR',icon:'🔧',sevCls:'b-maj',tip:'🔧 Test TEL2 first. If TEL2 works — TEL1 FXS port hardware fault = replace ONT.',
+    steps:[
+      {n:1,title:'Try TEL2 port if available',body:'Plug a phone into TEL2 port on ONT. If dial tone on TEL2 but not TEL1 — TEL1 FXS hardware is faulty.',expand:''},
+      {n:2,title:'Check codec settings in ZMS',body:'ZMS → ONT → Services → Voice → Codec. G.711 (aLaw/uLaw) is standard for KCOM UK voice. Incorrect codec = calls fail or have audio issues.',expand:''},
+      {n:3,title:'Re-sync and reboot',body:'ZMS → Actions → Synchronize then Reboot. FXS port issues sometimes resolve after full OMCI-driven reboot.',expand:''},
+      {n:4,title:'Replace ONT if TEL1 hardware fault',body:'If TEL1 no dial tone with correct SIP registration and TEL2 works — replace ONT.',expand:''}
+    ]},
+};
+</script>
+<script>
+// ═══════════════════════════════════════
+// WIZARD ENGINE
+// ═══════════════════════════════════════
+let wState = {id:null,count:0};
+
+function startWizard(id) {
+  document.getElementById('searchSugg').classList.remove('show');
+  document.getElementById('searchDefault').style.display='none';
+  document.getElementById('wizardWrap').classList.add('show');
+  const w = wizards[id];
+  if (!w || !w.start) { showScreen('modules',null,'nav-modules'); showRef(id); return; }
+  wState = {id,count:0};
+  document.getElementById('wiz-icon').textContent = w.icon;
+  document.getElementById('wiz-title').textContent = w.title;
+  document.getElementById('wiz-sub').textContent = w.sub || 'Answer each question to identify the fault';
+  updateProg(0,6);
+  renderStep(w.start);
+  showScreen('search',null,'nav-search');
+}
+
+function renderStep(stepData) {
+  if (!stepData) return;
+  wState.count++;
+  updateProg(wState.count, 6);
+  const opts = stepData.opts.map(o=>`
+    <button class="step-opt" onclick="pickOpt('${o.next||''}','${o.res||''}')">
+      <span class="step-opt-icon">${o.icon}</span>
+      <div class="step-opt-body"><strong>${o.label}</strong><span>${o.sub}</span></div>
+      <span class="step-opt-arr">›</span>
+    </button>`).join('');
+  document.getElementById('wizContent').innerHTML=`
+    <div class="wizard-step">
+      <div class="step-q">${stepData.q}</div>
+      ${stepData.ctx?`<div class="step-ctx">${stepData.ctx}</div>`:''}
+      <div class="step-opts">${opts}</div>
+    </div>`;
+}
+
+function pickOpt(nextKey, resKey) {
+  if (resKey) { showResolution(resKey); return; }
+  if (nextKey) {
+    const step = wizards[nextKey];
+    if (step) renderStep(step);
+  }
+}
+
+function showResolution(resKey) {
+  const res = resolutions[resKey];
+  if (!res) { document.getElementById('wizContent').innerHTML='<div class="alert alert-warn"><strong>Not found</strong>Please browse the Modules section.</div>'; return; }
+  updateProg(6,6);
+  const steps = res.steps.map((s,i)=>`
+    <div class="action-step" id="as${i}" onclick="toggleStep(${i},${res.steps.length})">
+      <div class="step-circle" id="sc${i}">${s.n}</div>
+      <div class="step-body">
+        <h4>${s.title}</h4>
+        <p>${s.body}</p>
+        ${s.expand?`<div class="step-expand" id="se${i}"><p>${s.expand}</p></div>`:''}
+      </div>
+      <div class="step-tick" id="st${i}">○</div>
+    </div>`).join('');
+  document.getElementById('wizContent').innerHTML=`
+    <div class="res-card">
+      <div class="res-card-header">
+        <div style="font-size:28px">${res.icon}</div>
+        <div class="res-card-title">${res.title}</div>
+        <span class="res-sev ${res.sevCls}">${res.sev}</span>
+      </div>
+      ${res.tip?`<div style="padding:12px 16px;border-bottom:1px solid var(--border)"><div class="tip-card tc-blue" style="margin:0" onclick="toggleTip(this)"><div class="tip-hdr">💡 Pro Tip <span class="tip-arrow">▼</span></div><div class="tip-body">${res.tip}</div></div></div>`:''}
+      <div class="action-steps">${steps}</div>
+      <div class="res-actions">
+        <button class="res-btn res-btn-sec" onclick="resetWizard()">← Start Over</button>
+        <button class="res-share-btn" onclick="shareResolution(this)" title="Share steps">📤</button>
+        <button class="res-btn res-btn-sec" onclick="askAiAboutResolutionFromCard(this)" style="border-color:var(--accent);color:var(--accent)">🤖 Ask AI</button>
+        <button class="res-btn res-btn-primary" onclick="showScreen('checklist',null,'nav-checklist')">✅ Checklist</button>
+      </div>
+    </div>`;
+}
+
+function toggleStep(i, total) {
+  const el = document.getElementById('as'+i);
+  const tick = document.getElementById('st'+i);
+  const circle = document.getElementById('sc'+i);
+  const expand = document.getElementById('se'+i);
+  if (expand) expand.classList.toggle('open');
+  const done = el.classList.toggle('done');
+  tick.textContent = done?'✓':'○';
+  if (done) { circle.textContent='✓'; circle.style.cssText='background:var(--accent3);border-color:var(--accent3);color:#001a3a;'; }
+  else { circle.textContent=i+1; circle.style.cssText='background:var(--surface);border-color:var(--accent);color:var(--accent);'; }
+}
+
+function updateProg(cur,max) {
+  const pct = max>0?Math.round((cur/max)*100):0;
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progLabel').textContent = cur>=max?'✓ Diagnosis complete':`Step ${cur} of ${max}`;
+}
+
+function resetWizard() {
+  document.getElementById('wizardWrap').classList.remove('show');
+  document.getElementById('searchDefault').style.display='';
+  document.getElementById('faultSearch').value='';
+  document.getElementById('searchClear').classList.remove('show');
+  document.getElementById('searchSugg').classList.remove('show');
+  wState={id:null,count:0};
+}
+
+// ═══════════════════════════════════════
+// REFERENCE CONTENT
+// ═══════════════════════════════════════
+const refContent = {
+  network:{title:'Network Architecture',icon:'🌐',sev:'INFO',html:`
+    <div class="alert alert-info"><strong>📡 KCOM & DZS</strong>KCOM has deployed DZS PON infrastructure across East Yorkshire and North Lincolnshire for over 20 years. Lightstream delivers full-fibre broadband using GPON with DZS OLTs and ONTs managed via ZMS.</div>
+    <div class="screen-title">Signal Path</div>
+    <div class="flow-block">OLT PON Port
+    │
+    Feeder Fibre
+    │
+    Passive Splitter (1:32 or 1:64)
+    ├── Drop Fibre → CTU → ONT → Router [Customer 1]
+    ├── Drop Fibre → CTU → ONT → Router [Customer 2]
+    └── Drop Fibre → CTU → ONT → Router [Customer N]</div>
+    <div class="screen-title">Key Parameters</div>
+    <div class="tbl-wrap"><table><thead><tr><th>Parameter</th><th>Value</th></tr></thead><tbody>
+    <tr><td>Downstream wavelength</td><td>1490 nm (OLT → ONT)</td></tr>
+    <tr><td>Upstream wavelength</td><td>1310 nm (ONT → OLT)</td></tr>
+    <tr><td>Max downstream</td><td>2.488 Gbps (shared per port)</td></tr>
+    <tr><td>Max upstream</td><td>1.244 Gbps (shared per port)</td></tr>
+    <tr><td>Ideal Rx power</td><td class="hl-ok">-18 to -22 dBm</td></tr>
+    <tr><td>Fault threshold</td><td class="hl-danger">Below -27 dBm</td></tr>
+    <tr><td>Max ONTs per port</td><td>64 (KCOM typically 32)</td></tr>
+    </tbody></table></div>`},
+
+  leds:{title:'LED Status Guide',icon:'🚦',sev:'INFO',html:`
+    <div class="screen-title">PON / Optical LED</div>
+    <div class="led-wrap">
+      <div class="led-row"><div class="led-dot" style="background:#00e87a;box-shadow:0 0 6px #00e87a"></div><div class="led-row-body"><strong>Solid Green</strong><span>ONT registered and operational — normal</span></div><div class="led-sev" style="color:var(--accent3)">OK</div></div>
+      <div class="led-row"><div class="led-dot" style="background:#00e87a;animation:blink 1s infinite"></div><div class="led-row-body"><strong>Slow Flash Green (1s)</strong><span>Ranging/registering — wait 90s, check ZMS for SUFI if persists</span></div><div class="led-sev" style="color:var(--warn)">WAIT</div></div>
+      <div class="led-row"><div class="led-dot" style="background:#ffb800"></div><div class="led-row-body"><strong>Amber / Fast Flash</strong><span>Signal detected but degraded (SDi alarm) — clean connectors</span></div><div class="led-sev" style="color:var(--warn)">MAJOR</div></div>
+      <div class="led-row"><div class="led-dot" style="background:#ff3b5c;box-shadow:0 0 6px #ff3b5c"></div><div class="led-row-body"><strong>Solid / Flashing Red</strong><span>Loss of optical signal (LOSi) — fibre fault</span></div><div class="led-sev" style="color:var(--danger)">CRIT</div></div>
+      <div class="led-row"><div class="led-dot" style="background:#222"></div><div class="led-row-body"><strong>Off</strong><span>No optical signal at all — check power and fibre</span></div><div class="led-sev" style="color:var(--danger)">CRIT</div></div>
+    </div>
+    <div class="screen-title">ALARM LED</div>
+    <div class="led-wrap">
+      <div class="led-row"><div class="led-dot" style="background:#ff3b5c;animation:blink 0.4s infinite"></div><div class="led-row-body"><strong>Fast Flash Red</strong><span>Rogue ONT — self-detected bad upstream transmission. Disconnect fibre immediately.</span></div><div class="led-sev" style="color:var(--danger)">ROGUE</div></div>
+      <div class="led-row"><div class="led-dot" style="background:#ff3b5c"></div><div class="led-row-body"><strong>Solid Red</strong><span>Hardware self-test failure — check ZMS, may need replacement</span></div><div class="led-sev" style="color:var(--danger)">CRIT</div></div>
+    </div>
+    <div class="screen-title">LAN / WAN LEDs</div>
+    <div class="led-wrap">
+      <div class="led-row"><div class="led-dot" style="background:#00e87a"></div><div class="led-row-body"><strong>LAN1 Green</strong><span>Ethernet link active — router connected</span></div><div class="led-sev" style="color:var(--accent3)">OK</div></div>
+      <div class="led-row"><div class="led-dot" style="background:#222"></div><div class="led-row-body"><strong>LAN1 Off</strong><span>No Ethernet link — check cable between ONT and router</span></div><div class="led-sev" style="color:var(--warn)">CHECK</div></div>
+      <div class="led-row"><div class="led-dot" style="background:#00e87a"></div><div class="led-row-body"><strong>WAN Solid Green</strong><span>Internet service active</span></div><div class="led-sev" style="color:var(--accent3)">OK</div></div>
+      <div class="led-row"><div class="led-dot" style="background:#ff3b5c"></div><div class="led-row-body"><strong>WAN Solid Red</strong><span>WAN active but no internet — check ZMS provisioning</span></div><div class="led-sev" style="color:var(--danger)">ZMS</div></div>
+    </div>
+    <div class="alert alert-warn"><strong>⚡ First Responder Rule</strong>Check PON LED first. Green = fibre OK, focus on service. Red/off = fibre fault, work backwards from CTU.</div>`},
+
+  optical:{title:'Optical Power Levels',icon:'💡',sev:'INFO',html:`
+    <div class="optical-gauge">
+      <div class="gauge-title">📊 Rx Power Thresholds at ONT</div>
+      <div class="gauge-row"><div class="gauge-lbl">Optimal</div><div class="gauge-track"><div class="gauge-fill g-ideal"></div></div><div class="gauge-val gv-ideal">-18 to -22 dBm</div></div>
+      <div class="gauge-row"><div class="gauge-lbl">Acceptable</div><div class="gauge-track"><div class="gauge-fill g-good"></div></div><div class="gauge-val gv-good">-22 to -26 dBm</div></div>
+      <div class="gauge-row"><div class="gauge-lbl">Marginal</div><div class="gauge-track"><div class="gauge-fill g-warn"></div></div><div class="gauge-val gv-warn">-26 to -27 dBm</div></div>
+      <div class="gauge-row"><div class="gauge-lbl">⚠️ Fault</div><div class="gauge-track"><div class="gauge-fill g-bad"></div></div><div class="gauge-val gv-bad">Below -27 dBm</div></div>
+    </div>
+    <div class="screen-title">Reading in ZMS</div>
+    <div class="detail-steps">
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">1</div><div class="ds-body"><h4>Find ONT in ZMS</h4><p>ZMS → Network → Devices → search by serial number → open ONT record</p></div></div></div>
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">2</div><div class="ds-body"><h4>Open Statistics → Optical</h4><p>ZMS polls ONT via OMCI and returns real-time readings</p><div class="ds-code">Rx Power  : -20.5 dBm  ← received from OLT
+Tx Power  : +2.1 dBm   ← sent to OLT (normal 0 to +5)
+Temp (°C) : 42         ← above 65°C = concern
+Voltage   : 3.3V</div></div></div></div>
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">3</div><div class="ds-body"><h4>Check Performance History</h4><p>ZMS → ONT → Performance → Optical Rx History. Gradual decline = contamination. Sudden drop = physical event. Spikes = intermittent connector issue.</p></div></div></div>
+    </div>
+    <div class="screen-title">Component Loss Reference</div>
+    <div class="tbl-wrap"><table><thead><tr><th>Component</th><th>Typical Loss</th></tr></thead><tbody>
+    <tr><td>1:32 splitter</td><td>~16 dB</td></tr>
+    <tr><td>1:64 splitter</td><td>~19 dB</td></tr>
+    <tr><td>SC/APC connector (clean)</td><td>~0.3 dB</td></tr>
+    <tr><td class="hl-danger">SC/APC connector (dirty)</td><td class="hl-danger">1–5+ dB variable</td></tr>
+    <tr><td class="hl-danger">APC/UPC mismatch</td><td class="hl-danger">3–8 dB</td></tr>
+    <tr><td>Fibre cable per km</td><td>~0.2 dB/km</td></tr>
+    <tr><td class="hl-danger">Tight bend (&lt;3cm radius)</td><td class="hl-danger">1–10+ dB</td></tr>
+    </tbody></table></div>`},
+
+  bip:{title:'BIP Error Counters',icon:'📉',sev:'INFO',html:`
+    <div class="alert alert-info"><strong>💡 What Are BIP Errors?</strong>BIP (Bit-Interleaved Parity) errors are GPON's built-in signal quality counter. They appear long before Rx power drops below alarm threshold — your earliest warning of connector degradation.</div>
+    <div class="tbl-wrap"><table><thead><tr><th>Counter</th><th>Direction</th><th>What It Reveals</th></tr></thead><tbody>
+    <tr><td class="hl">BIPd</td><td>OLT → ONT</td><td>High BIPd = downstream path dirty connector or weak OLT Tx</td></tr>
+    <tr><td class="hl">BIPu</td><td>ONT → OLT</td><td>High BIPu on one ONT = that ONT's laser is marginal</td></tr>
+    <tr><td class="hl">FEC Corrected</td><td>Both</td><td>Errors being auto-corrected — moderate counts are normal</td></tr>
+    <tr><td class="hl-danger">FEC Uncorrectable</td><td>Both</td><td>Must be zero — service degradation occurring</td></tr>
+    </tbody></table></div>
+    <div class="screen-title">How to Check in ZMS</div>
+    <div class="detail-steps">
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">1</div><div class="ds-body"><h4>Navigate to GTC Statistics</h4><p>ZMS → [ONT] → Statistics → GTC/OMCI tab</p><div class="ds-code">Downstream BIP Errors : 0         ← ideal
+Upstream BIP Errors   : 147,832   ← ⚠️ investigate
+FEC Corrected         : 23        ← monitor
+FEC Uncorrectable     : 0         ← must stay zero</div></div></div></div>
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">2</div><div class="ds-body"><h4>Reset and monitor rate</h4><p>ZMS → ONT → Actions → Clear Statistics. Wait 5 minutes. If 500+ new BIP errors appear = active problem right now.</p></div></div></div>
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">3</div><div class="ds-body"><h4>Use direction to locate fault</h4><p><span class="hl">High BIPd only</span> = downstream path (ONT connector). <span class="hl-warn">High BIPu only</span> = ONT laser marginal (check Tx power). <span class="hl-danger">Both high</span> = same connector affecting both directions.</p></div></div></div>
+    </div>
+    <div class="alert alert-warn"><strong>⚠️ Pro Tip</strong>BIP errors rising with acceptable Rx power = clean the connector. Contamination corrupts signal integrity before dropping power below threshold.</div>`},
+
+  connectors:{title:'APC vs UPC Connectors',icon:'🔌',sev:'CRITICAL',html:`
+    <div class="alert alert-danger"><strong>🚨 NEVER mix APC (green) and UPC (blue) connectors</strong>A mismatch adds 3–8 dB of loss silently. Looks identical to a fibre fault. Cleaning does nothing. Always check connector colour before mating.</div>
+    <div class="tbl-wrap"><table><thead><tr><th>Type</th><th>Colour</th><th>End Face</th><th>KCOM GPON?</th></tr></thead><tbody>
+    <tr><td class="hl-ok">SC/APC</td><td class="hl-ok">🟢 Green</td><td>8° angled</td><td class="hl-ok">✅ CORRECT</td></tr>
+    <tr><td class="hl-danger">SC/UPC</td><td class="hl-danger">🔵 Blue</td><td>0° flat</td><td class="hl-danger">❌ WRONG</td></tr>
+    <tr><td>SC/PC</td><td>⚫ Black/grey</td><td>0° flat</td><td class="hl-danger">❌ WRONG</td></tr>
+    </tbody></table></div>
+    <div class="alert alert-info"><strong>Why APC only for GPON?</strong>The 8° angle means reflected light bounces away from the fibre core, giving &gt;60 dB return loss. UPC reflections can cause the ONT receiver to see ghost signals, generating BIP errors and timing issues that look like fibre faults.</div>
+    <div class="screen-title">Mismatch Signature in ZMS</div>
+    <div class="detail-step"><div class="ds-inner"><div class="ds-num">!</div><div class="ds-body"><h4>What APC/UPC mismatch looks like</h4><div class="ds-code">Neighbours avg Rx power : -20.5 dBm
+This customer Rx power  : -24.8 dBm  ← ~4 dB lower
+On tight budget         : -28.3 dBm  ← BELOW THRESHOLD
+
+Also: elevated BIP errors even after "cleaning"</div></div></div></div>
+    <div class="screen-title">Common Connector Mistakes</div>
+    <div class="tbl-wrap"><table><thead><tr><th>Mistake</th><th>Effect</th><th>Fix</th></tr></thead><tbody>
+    <tr><td>Fingerprint on end face</td><td>2–5 dB loss</td><td>Dry clean with reel cleaner, inspect scope</td></tr>
+    <tr><td>Dirty/contaminated end face</td><td>1–10+ dB</td><td>Push-through cleaner + scope inspection</td></tr>
+    <tr><td>Scratched core</td><td>0.5–5+ dB</td><td>Replace patchlead if scratch crosses core</td></tr>
+    <tr><td>Connector not fully seated</td><td>Intermittent/total loss</td><td>Push until SC latch clicks firmly</td></tr>
+    <tr><td>Cracked ferrule</td><td>Variable, potentially catastrophic</td><td>Visible under scope — replace connector</td></tr>
+    </tbody></table></div>`},
+
+  environmental:{title:'Environmental Faults',icon:'🌧️',sev:'MAJOR',html:`
+    <div class="screen-title">🌧️ Water Ingress</div>
+    <div class="detail-steps">
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">1</div><div class="ds-body"><h4>CTU inspection</h4><p>Open CTU. Look for: condensation, water droplets, white mineral deposits (dried water), green corrosion, damaged foam seals. Cross-reference ZMS Rx power dips with rainfall timestamps.</p></div></div></div>
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">2</div><div class="ds-body"><h4>Dry and clean</h4><p>Dry CTU with dry cloth. Clean SC/APC with dry push-through cleaner. Allow to fully dry. Do NOT use compressed air — pushes moisture deeper.</p></div></div></div>
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">3</div><div class="ds-body"><h4>Re-seal and verify</h4><p>Re-seal CTU cable entry with outdoor sealant. Check lid seal. After drying, Rx power should recover toward -18 to -22 dBm.</p></div></div></div>
+    </div>
+    <div class="screen-title">🌡️ Temperature Issues</div>
+    <div class="tbl-wrap"><table><thead><tr><th>Condition</th><th>Signs in ZMS</th><th>Action</th></tr></thead><tbody>
+    <tr><td class="hl-danger">ONT overheating (&gt;65°C)</td><td>DOWi alarms afternoons. ONU_REBOOTED events. High temp in System Info.</td><td>Move to ventilated location. 10cm clearance all sides. Remove from hot cupboard.</td></tr>
+    <tr><td class="hl">Cold/frost</td><td>Faults overnight, clear by midday.</td><td>Check CTU seals. Ensure ONT in 0–40°C operating range.</td></tr>
+    <tr><td class="hl">Thermal cycling</td><td>Gradual Rx power decline over months.</td><td>Re-seat all connectors. Check cable clips not overtightened.</td></tr>
+    </tbody></table></div>
+    <div class="screen-title">🐀 Physical Damage</div>
+    <div class="tbl-wrap"><table><thead><tr><th>Type</th><th>Signs</th><th>Fix</th></tr></thead><tbody>
+    <tr><td>Rodent damage</td><td>Total LOS. Bite marks on cable jacket.</td><td>Replace cable. Use armoured cable in vulnerable areas.</td></tr>
+    <tr><td>Building work</td><td>Sudden LOS after drilling/screwing/nailing.</td><td>Locate with VFL. Replace damaged section.</td></tr>
+    <tr><td>Staple through fibre</td><td>Intermittent or total LOS. Staple visible on cable.</td><td>Remove staple. Test. Replace if core crushed.</td></tr>
+    <tr><td>Door frame pinch</td><td>Drops when door opens/closes.</td><td>Re-route clear of door. Use cable protector strips.</td></tr>
+    </tbody></table></div>`},
+
+  zms:{title:'ZMS Platform Guide',icon:'🖥️',sev:'INFO',html:`
+    <div class="screen-title">Navigation Structure</div>
+    <div class="flow-block">ZMS Menu:
+├── Dashboard     → Network health, active alarms
+├── Network
+│   ├── Devices   → OLT → Card → PON Port → ONTs
+│   └── Inventory → Device inventory
+├── Alarms
+│   ├── Active    → Current uncleared alarms
+│   └── History   → Searchable historical log
+├── Performance
+│   ├── Optical   → Rx/Tx power per ONT
+│   └── Port Stats → Throughput
+├── Configuration
+│   ├── Templates → Service/bandwidth profiles
+│   └── Provision → ONT service assignment
+└── Admin
+    ├── CPE Manager → Firmware upgrades
+    └── Audit Log   → All actions logged</div>
+    <div class="screen-title">Key ZMS Workflows</div>
+    <div class="detail-steps">
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">🔍</div><div class="ds-body"><h4>Find ONT by Serial</h4><div class="ds-code">Network → Devices → Search
+Serial: [e.g. ZNID1A2B3C4D]
+→ Opens ONT detail page</div></div></div></div>
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">🔄</div><div class="ds-body"><h4>Remote Reboot</h4><div class="ds-code">ONT Record → Actions → Reboot ONT → Confirm
+→ ONT offline ~90 seconds → returns ONLINE
+→ ONU_REBOOTED alarm raised then clears</div></div></div></div>
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">⚙️</div><div class="ds-body"><h4>Provision New ONT</h4><div class="ds-code">OLT → PON Port → DISCOVERED ONT
+→ Apply Template: [KCOM-Lightstream-XXX]
+→ Assign to GE1 (LAN1)
+→ Actions → Synchronize
+→ Verify ONLINE + services Active</div></div></div></div>
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">🔔</div><div class="ds-body"><h4>Alarm History Search</h4><div class="ds-code">Alarms → History → Filter:
+  Serial: [ONT serial]
+  Date:   Last 7 days
+  Type:   LOSi / SDi / DOWi
+→ Timestamps reveal fault pattern</div></div></div></div>
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">📥</div><div class="ds-body"><h4>Firmware Upgrade</h4><div class="ds-code">ONT → Actions → Upgrade Firmware
+→ Select approved version → Confirm
+→ Takes 5–10 mins → ONT auto-reboots
+→ Verify new version in System Information
+
+Bulk upgrade:
+Admin → CPE Manager → New Task
+→ Select model → Select firmware
+→ Schedule (off-peak recommended)</div></div></div></div>
+    </div>`},
+
+  tools:{title:'Field Tools Guide',icon:'🧰',sev:'INFO',html:`
+    <div class="tbl-wrap"><table><thead><tr><th>Tool</th><th>When to Use</th><th>Key Tips</th></tr></thead><tbody>
+    <tr><td class="hl">Optical Power Meter</td><td>Measure signal power at CTU output and ONT input</td><td>Set to 1490nm downstream / 1310nm upstream. Target: -18 to -22 dBm at ONT.</td></tr>
+    <tr><td class="hl">VFL (Red Light Pen)</td><td>Find fibre breaks, bends, bad connectors along internal fibre run</td><td>Disconnect from live network first. Use pulsed mode in daylight. Fault glows red. Max ~5km range.</td></tr>
+    <tr><td class="hl">Fibre Inspection Scope</td><td>Inspect every connector end face before mating</td><td>Clean → Inspect → Mate. Never mate before inspecting. Digital scope with pass/fail analysis is best.</td></tr>
+    <tr><td class="hl">Fibre Cleaning Kit</td><td>Before every connection. When scope reveals contamination.</td><td>Push-through cleaners for female ports. Reel cleaner for male connectors. Never re-use a wipe. Never blow breath on a connector.</td></tr>
+    <tr><td class="hl">OTDR</td><td>Locate faults by distance when VFL and power meter aren't enough</td><td>Use 1650nm filter on live GPON. 5m launch cable minimum. Document the trace for future reference.</td></tr>
+    <tr><td class="hl">Ethernet Tester</td><td>Rule out cable fault between ONT and router</td><td>A Cat5e with one broken pair links at 100Mbps not gigabit. Always test cable before blaming ONT.</td></tr>
+    <tr><td class="hl">Mains Socket Tester</td><td>Any power-related fault — test before connecting anything</td><td>5 seconds, rules out mains wiring as the cause. Essential safety check.</td></tr>
+    </tbody></table></div>
+    <div class="screen-title">VFL Step by Step</div>
+    <div class="detail-steps">
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">1</div><div class="ds-body"><h4>Isolate the section</h4><p>Disconnect fibre from ONT and CTU. Never use VFL on live GPON — the 1490nm laser may be present simultaneously.</p></div></div></div>
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">2</div><div class="ds-body"><h4>Connect VFL and activate</h4><p>Use APC adapter on VFL. Pulsed mode is easier to see in ambient light conditions.</p></div></div></div>
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">3</div><div class="ds-body"><h4>Trace the route</h4><p>Follow fibre from ONT toward CTU. Red glow at break point. Red bleeding at bends. Red scatter at bad connector. Dim room = easier to see.</p></div></div></div>
+      <div class="detail-step"><div class="ds-inner"><div class="ds-num">4</div><div class="ds-body"><h4>Check far end</h4><p>Bright red glow at CTU connector = fibre intact. Dim glow = high loss. No glow = break somewhere in path.</p></div></div></div>
+    </div>`},
+
+  flowchart:{title:'Fault Decision Flowchart',icon:'🗺️',sev:'INFO',html:`
+    <div class="alert alert-info"><strong>💡 Use as your systematic checklist on every job</strong>Follow from top. Each branch leads to the correct resolution path.</div>
+    <div class="flow-block">CUSTOMER REPORTS FAULT
+
+STEP 1: ZMS BEFORE YOU ARRIVE
+├── ONT ONLINE right now?
+│   ├── YES → Intermittent/service fault → check BIP, speeds, VoIP
+│   └── NO  → Genuinely offline → Step 2
+└── Multiple ONTs on same PON port offline?
+    ├── ONLY THIS ONE → Customer-side fault → proceed below
+    └── MULTIPLE/ALL  → Network fault → ESCALATE NOC NOW
+
+STEP 2: ZMS ALARM TYPE
+├── DGi           → ONT lost power → check PSU adapter
+├── LOSi / SFi    → Customer-side fibre fault → clean/inspect
+├── LOS / LOF     → Network fault → ESCALATE NOC
+├── SUFi          → Won't register → check serial / firmware
+├── ROGUE alarm   → Find and isolate culprit ONT
+├── DOWi          → Timing drift → check temperature first
+├── BIP_THR       → Quality issue → clean connectors
+├── SDi           → Signal degrade → inspect fibre path
+└── No alarm + ONLINE
+    ├── No internet → check ZMS provisioning/VLAN
+    ├── Slow speeds → check bandwidth profile + BIP
+    └── No phone   → check SIP registration in ZMS
+
+STEP 3: PHYSICAL ONT CHECK ON ARRIVAL
+├── POWER LED off      → PSU / mains fault
+├── PON LED red/off    → Fibre / optical fault
+├── ALARM flashing red → Rogue / hardware → disconnect fibre
+├── PON flashing green → Registration failing
+├── PON green LAN off  → Ethernet cable fault
+└── All LEDs normal    → Provisioning or router fault
+
+STEP 4: VERIFY BEFORE CLOSING JOB
+□ Rx power -18 to -22 dBm in ZMS
+□ BIP errors near zero after 5 mins
+□ No active alarms in ZMS
+□ Speed test matches subscribed package
+□ SIP REGISTERED in ZMS (if VoIP customer)
+□ No new alarms on neighbouring ONTs</div>`},
+};
+
+function showRef(id) {
+  document.getElementById('modListWrap').style.display='none';
+  const ref = refContent[id];
+  if (!ref) { startWizard(id); showScreen('search',null,'nav-search'); return; }
+  const sevMap={CRITICAL:'b-crit',MAJOR:'b-maj',MINOR:'b-min',INFO:'b-info'};
+  document.getElementById('refArea').innerHTML=`
+    <div class="ref-header">
+      <button class="back-btn" onclick="showModList()">‹</button>
+      <h2>${ref.icon} ${ref.title}</h2>
+      <span class="ref-sev-badge ${sevMap[ref.sev]||'b-info'}">${ref.sev}</span>
+    </div>
+    ${ref.html}`;
+  window.scrollTo(0,0);
+}
+function showModList() {
+  document.getElementById('refArea').innerHTML='';
+  document.getElementById('modListWrap').style.display='';
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════
+// ALARMS
+// ═══════════════════════════════════════
+const alarmData = [
+  {code:'LOS',name:'Loss of Signal',sev:'CRITICAL',sc:'b-crit',meaning:'OLT receives NO signal from entire PON port. All ONTs on that port offline.',action:'Check OLT SFP, feeder fibre. Multiple customers affected — escalate to NOC immediately.'},
+  {code:'LOSi',name:'Loss of Signal (ONT i)',sev:'CRITICAL',sc:'b-crit',meaning:'OLT cannot receive signal from this specific ONT only. Other ONTs on same port unaffected.',action:'Check ONT power, SC/APC connector, drop fibre to CTU. Clean all connectors.'},
+  {code:'LOF',name:'Loss of Frame',sev:'CRITICAL',sc:'b-crit',meaning:'5+ consecutive invalid frame sync patterns from OLT. Whole PON port affected.',action:'Check optical levels on entire PON port. May indicate OLT SFP issue — escalate.'},
+  {code:'LOFi',name:'Loss of Frame (ONT i)',sev:'CRITICAL',sc:'b-crit',meaning:'OLT cannot achieve frame delineation from this specific ONT.',action:'Check optical path and Rx power. May indicate ONT hardware fault — power cycle then replace if persists.'},
+  {code:'SDi',name:'Signal Degrade (ONT i)',sev:'MAJOR',sc:'b-maj',meaning:'Upstream signal from this ONT is degraded — below threshold but not total loss. Intermittent drops likely.',action:'Check Rx power in ZMS, clean all connectors, inspect for fibre bends. Signal is near failure threshold.'},
+  {code:'SFi',name:'Signal Fail (ONT i)',sev:'CRITICAL',sc:'b-crit',meaning:'Upstream signal quality degraded below acceptable threshold. Service failure occurring or imminent.',action:'Treat as LOS — inspect full fibre path, clean connectors, replace fibre if needed.'},
+  {code:'DGi',name:'Dying Gasp (ONT i)',sev:'MAJOR',sc:'b-maj',meaning:'ONT sent a Dying Gasp PLOAM message immediately before losing power. Confirms ONT lost mains power.',action:'Check mains socket, PSU adapter, fuse. Rules out fibre fault as primary cause.'},
+  {code:'SUFi',name:'Start-Up Failure (ONT i)',sev:'MAJOR',sc:'b-maj',meaning:'ONT ranging has failed twice. Cannot complete GPON registration despite having optical signal.',action:'Check serial number in ZMS matches physical label. Check Rx power above -27 dBm. Check firmware compatibility.'},
+  {code:'DFi',name:'Deactivate Failure (ONT i)',sev:'MAJOR',sc:'b-maj',meaning:'ONT did not respond correctly after 3 Deactivate messages from OLT.',action:'Power cycle ONT. Check OLT-ONT OMCI communication. May need factory reset via ZMS.'},
+  {code:'LOAMi',name:'Loss of PLOAM (ONT i)',sev:'MAJOR',sc:'b-maj',meaning:'OLT has not received acknowledgement from ONT after downstream PLOAM messages. OMCI channel lost.',action:'Power cycle ONT. Check optical path. Firmware update may be needed if OMCI bug.'},
+  {code:'DOWi',name:'Drift of Window (ONT i)',sev:'MINOR',sc:'b-min',meaning:'ONT upstream transmission received at unexpected position in frame. Ranging drift detected — early warning of rogue behaviour.',action:'Check ONT temperature first (overheating causes timing drift). Check Rx power. May escalate to rogue if untreated.'},
+  {code:'LCDi',name:'Loss of GEM Channel Delineation',sev:'MAJOR',sc:'b-maj',meaning:'GEM channel synchronisation lost. Service data cannot be correctly transported.',action:'Check optical levels. Power cycle ONT. May indicate OLT/ONT firmware incompatibility.'},
+  {code:'BIP_THR_EXCEEDED',name:'BIP Threshold Exceeded',sev:'MAJOR',sc:'b-maj',meaning:'BIP (Bit-Interleaved Parity) errors exceeded the configured threshold. Signal quality poor. ONT may be auto-deactivated if blockOnError mode is enabled.',action:'Clean all SC/APC connectors. Check Rx and Tx power in ZMS. Clear BIP counters and monitor rate. Check for APC/UPC mismatch.'},
+  {code:'ONU_REBOOTED',name:'ONT Rebooted',sev:'INFO',sc:'b-info',meaning:'ONT was rebooted via ZMS or CLI command. Expected alarm after remote reboot action.',action:'No action needed if reboot was intentional. Clear alarm. Monitor ONT return to service.'},
+  {code:'SELF_TEST_FAIL',name:'ONT Self-Test Failure',sev:'CRITICAL',sc:'b-crit',meaning:'ONT failed its internal hardware self-test on startup. Hardware defect confirmed.',action:'Replace ONT — hardware fault, no software remedy possible.'},
+  {code:'BATTERY_ON',name:'Battery Backup Active',sev:'MAJOR',sc:'b-maj',meaning:'Normal mains power failed. ONT running on internal battery backup. Service continues until battery depletes.',action:'Check mains supply at premises. Usually preceded by DGi alarm. Restore mains — battery recharges automatically.'},
+  {code:'OMCI_PHYSICAL_INTRUSION',name:'Physical Intrusion / Tamper',sev:'MINOR',sc:'b-min',meaning:'ONT casing has been opened or tampered with. Environmental protection may be compromised.',action:'Ensure casing is securely closed. Check for internal damage. Alarm clears when case is properly closed.'},
+  {code:'GPON_OLT_ROGUE_ONU',name:'Rogue ONT Detected (OLT)',sev:'CRITICAL',sc:'b-crit',meaning:'OLT detected an ONT transmitting upstream outside its assigned time slot. All customers on PON port may be affected.',action:'Find culprit ONT via ZMS alarm history and DOWi patterns. Disconnect fibre at culprit property. Replace ONT.'},
+  {code:'GPON_ONU_LEVEL_ROGUE',name:'Rogue ONT Self-Reported',sev:'CRITICAL',sc:'b-crit',meaning:'This specific ONT has detected it is transmitting outside its assigned upstream time window.',action:'This ONT IS the rogue. Disconnect SC/APC fibre immediately to stop disrupting neighbours. Replace ONT.'},
+  {code:'TF',name:'Transmitter Failure (OLT)',sev:'CRITICAL',sc:'b-crit',meaning:'OLT optical transmitter has failed. All ONTs on affected PON port will be offline.',action:'Escalate to network team immediately — OLT SFP or line card replacement required.'},
+];
+
+function renderAlarms(filter) {
+  const f = filter.toLowerCase();
+  const filtered = alarmData.filter(a=>!f||a.code.toLowerCase().includes(f)||a.name.toLowerCase().includes(f)||a.meaning.toLowerCase().includes(f)||a.action.toLowerCase().includes(f));
+  if (!filtered.length) { document.getElementById('alarmList').innerHTML='<div class="empty-state"><div class="ei">🔍</div><p>No alarms match your search.</p></div>'; return; }
+  const borderColour = sc => sc==='b-crit'?'var(--danger)':sc==='b-maj'?'var(--warn)':sc==='b-min'?'var(--accent)':'var(--accent3)';
+  document.getElementById('alarmList').innerHTML=filtered.map((a,i)=>`
+    <div class="tip-card" onclick="toggleTip(this)" style="border-left-color:${borderColour(a.sc)};margin-bottom:8px">
+      <div class="tip-hdr" style="color:${borderColour(a.sc)}">
+        <span class="mi-badge ${a.sc}" style="margin-right:8px">${a.code}</span>${a.name}
+        <span class="tip-arrow">▼</span>
+      </div>
+      <div class="tip-body">
+        <p style="margin-bottom:8px;color:var(--text-mid)">${a.meaning}</p>
+        <div class="alert alert-ok" style="margin:0"><strong>Action</strong>${a.action}</div>
+      </div>
+    </div>`).join('');
+}
+function filterAlarms(val){ renderAlarms(val); }
+
+// ═══════════════════════════════════════
+// CHECKLIST
+// ═══════════════════════════════════════
+const checkItems=[
+  'ZMS shows ONT ONLINE with no active alarms',
+  'Rx power is -18 to -22 dBm (minimum acceptable -26 dBm)',
+  'Tx power in normal range (0 to +5 dBm)',
+  'BIP error counters: near zero after 5 minutes monitoring',
+  'PON LED on ONT: solid green',
+  'LAN1 LED on ONT: solid/flashing green (router connected)',
+  'Router WAN port has KCOM IP address via DHCP',
+  'Internet speed test matches customer\'s subscribed package',
+  'VoIP: SIP status REGISTERED in ZMS (if applicable)',
+  'Dial tone confirmed at phone TEL1 (if applicable)',
+  'No new alarms on neighbouring ONTs after your work',
+  'ZMS alarm history: no new alarms post-intervention',
+  'All actions, serial numbers and readings logged in KCOM systems',
+];
+let checkState=[];
+function renderChecklist(){
+  if(!checkState.length) checkState=new Array(checkItems.length).fill(false);
+  const done=checkState.filter(Boolean).length;
+  document.getElementById('checklistEl').innerHTML=checkItems.map((item,i)=>`
+    <div class="check-item ${checkState[i]?'checked':''}" onclick="toggleCheck(${i})">
+      <div class="check-box">${checkState[i]?'✓':''}</div>
+      <div class="check-lbl">${item}</div>
+    </div>`).join('')+`<div class="alert ${done===checkItems.length?'alert-ok':'alert-info'}" style="margin-top:4px"><strong>${done===checkItems.length?'✅ ALL CHECKS PASSED — Safe to close job':`${done} / ${checkItems.length} items completed`}</strong></div>`;
+}
+function toggleCheck(i){ checkState[i]=!checkState[i]; renderChecklist(); }
+function resetChecklist(){ checkState=new Array(checkItems.length).fill(false); renderChecklist(); }
+
+// ═══════════════════════════════════════
+// QUIZ
+// ═══════════════════════════════════════
+const questions=[
+  {q:'A customer reports no internet. The PON LED is solid red. What does this indicate?',opts:['The router is disconnected from the ONT','Loss of optical signal (LOS) — fibre or connector fault','The service is not provisioned in ZMS','The ONT needs a firmware upgrade'],correct:1,explain:'A solid red PON LED means the ONT is receiving no optical signal downstream (LOS). First check the SC/APC connector is fully seated and clean before investigating further.'},
+  {q:'ZMS shows a LOSi alarm for one ONT but all other ONTs on the same PON port are ONLINE. What does this tell you?',opts:['The entire feeder fibre is broken','The OLT SFP module has failed','The fault is specific to this subscriber — drop fibre or ONT issue','All 64 subscribers on the port are affected'],correct:2,explain:'LOSi (i = individual) means only this specific ONT has lost signal. All other ONTs being online confirms the network upstream is fine — the fault is at this property only.'},
+  {q:'ZMS shows Rx power of -29 dBm on an ONT. What is the correct action?',opts:['No action — within normal range','Schedule a firmware upgrade','Investigate urgently — this is below the -27 dBm fault threshold','Reboot the OLT remotely'],correct:2,explain:'Below -27 dBm is the fault threshold. At -29 dBm service is at risk. Inspect the full optical path and clean all connectors immediately.'},
+  {q:'A DGi (Dying Gasp) alarm appears in ZMS. The customer says they never lost power. What is the most likely cause?',opts:['The feeder fibre broke','All customers on the PON port lost service','The PSU adapter is failing under load — not producing enough stable voltage','The ONT firmware crashed'],correct:2,explain:'If the customer reports no power loss but ZMS shows DGi, the PSU adapter is almost certainly failing — outputting insufficient voltage under load. Swap the PSU before any other investigation.'},
+  {q:'An ONT has a solid green PON LED but the customer has no internet. What is the most likely cause?',opts:['Fibre break between CTU and ONT','Service provisioning fault — data service in ZMS not correctly configured','The OLT SFP has failed','The ONT needs physical replacement'],correct:1,explain:'PON solid green = ONT is registered and has optical signal. No internet with a healthy PON LED is almost always a service/provisioning issue — check ZMS Services tab for VLAN, bandwidth profile, and active status.'},
+  {q:'An ONT\'s ALARM LED is flashing red rapidly. ZMS shows a GPON_ONU_LEVEL_ROGUE_ALARM for this serial. What should you do FIRST?',opts:['Power cycle the ONT immediately','Reboot the ONT remotely from ZMS','Disconnect the SC/APC fibre from the ONT to stop disrupting neighbours','Update the firmware via ZMS CPE Manager'],correct:2,explain:'A confirmed rogue ONT must have its fibre disconnected immediately. Every second it transmits, it corrupts upstream traffic for all other customers on the PON port. Disconnect fibre first, then investigate.'},
+  {q:'BIP upstream errors are rising rapidly in ZMS but Rx power reads -21 dBm (acceptable). What is the most likely cause?',opts:['OLT has a failed SFP','A dirty connector is corrupting signal without dropping power below threshold','Wrong bandwidth profile is applied','ONT firmware incompatibility'],correct:1,explain:'BIP errors rising with acceptable Rx power is the classic dirty connector signature. Contamination corrupts signal integrity before optical power drops below threshold. Clean all connectors and recheck BIP counters.'},
+  {q:'What is the IDEAL Rx optical power range at the ONT on the KCOM GPON network?',opts:['0 to -10 dBm','-10 to -18 dBm','-18 to -22 dBm','-27 to -30 dBm'],correct:2,explain:'Ideal Rx power is -18 to -22 dBm. -22 to -26 dBm is acceptable but worth monitoring. Below -27 dBm is the fault threshold where service reliability is at risk.'},
+  {q:'You connect a blue (UPC) patchlead to the ONT\'s green (APC) SC port. What happens?',opts:['No problem — any SC connector fits any SC port','APC/UPC mismatch adds 3–8 dB of loss, potentially pushing the ONT below fault threshold','The ONT reboots and flags a warning in ZMS','The fibre carries light in one direction only'],correct:1,explain:'Green = APC (8° angled). Blue = UPC (flat). The angle mismatch causes significant optical loss and increased back-reflection. Always use green SC/APC connectors exclusively on KCOM GPON infrastructure.'},
+  {q:'Multiple ONTs on the same PON port suddenly go offline simultaneously in ZMS. What does this indicate?',opts:['Each customer has independently had a PSU failure','A network-side fault — feeder fibre break, failed OLT port, or a rogue ONT disrupting the whole port','A ZMS software display bug','All customers have simultaneously disconnected their ONTs'],correct:1,explain:'Simultaneous outage across multiple ONTs is never a coincidence. It indicates a network fault upstream of the splitter — feeder fibre break, OLT port failure, or a rogue ONT causing upstream collision. Escalate to NOC immediately.'},
+];
+let quizAnswered={},quizScore=0;
+function renderQuiz(){
+  quizAnswered={}; quizScore=0;
+  document.getElementById('quizContainer').innerHTML=
+    `<div class="alert alert-info"><strong>🎯 10 Questions</strong>Tap the correct answer. Each question reveals an explanation when answered.</div>`+
+    questions.map((q,i)=>`
+      <div class="quiz-card">
+        <div class="quiz-num">Question ${i+1} of ${questions.length}</div>
+        <div class="quiz-q">${q.q}</div>
+        <div class="quiz-opts">${q.opts.map((o,j)=>`<button class="quiz-opt" id="qo${i}_${j}" onclick="answerQ(${i},${j})">${String.fromCharCode(65+j)}. ${o}</button>`).join('')}</div>
+        <div class="quiz-feedback alert" id="qf${i}"></div>
+      </div>`).join('')+`<div id="quizResult"></div>`;
+}
+function answerQ(qi,ai){
+  if(quizAnswered[qi]!==undefined) return;
+  quizAnswered[qi]=ai;
+  const q=questions[qi];
+  const correct=ai===q.correct;
+  if(correct) quizScore++;
+  q.opts.forEach((_,j)=>{
+    const el=document.getElementById(`qo${qi}_${j}`);
+    if(j===q.correct) el.classList.add('correct');
+    else if(j===ai&&!correct) el.classList.add('wrong');
+    el.disabled=true;
+  });
+  const fb=document.getElementById(`qf${qi}`);
+  fb.className=`quiz-feedback alert ${correct?'alert-ok':'alert-danger'}`;
+  fb.innerHTML=`<strong>${correct?'✅ Correct!':'❌ Incorrect'}</strong>${q.explain}`;
+  fb.style.display='block';
+  if(Object.keys(quizAnswered).length===questions.length){
+    const grade=quizScore>=9?'🏆 Excellent — Distinction':quizScore>=7?'✅ Good — Pass':quizScore>=5?'⚠️ Borderline — Review recommended':'❌ Fail — Please re-study the material';
+    document.getElementById('quizResult').innerHTML=`
+      <div class="quiz-score-card">
+        <div class="quiz-score-num">${quizScore}/10</div>
+        <div class="quiz-score-lbl">Questions Correct</div>
+        <div class="quiz-grade">${grade}</div>
+      </div>
+      <button class="res-btn res-btn-primary" style="width:100%;margin-bottom:16px" onclick="renderQuiz()">↺ Retake Quiz</button>`;
+    document.getElementById('quizResult').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+window.addEventListener('resize',()=>{
+  document.getElementById('deskNav').style.display=window.innerWidth>=900?'flex':'none';
+});
+if(window.innerWidth>=900) document.getElementById('deskNav').style.display='flex';
+
+function shareResolution(btn) {
+  const card = btn.closest('.res-card');
+  if (!card) return;
+  const title = card.querySelector('.res-card-title').textContent;
+  const steps = [...card.querySelectorAll('.step-body h4')].map((h,i) => (i+1)+'. '+h.textContent).join('\n');
+  const text = 'JB ONT Fault Guide\n' + title + '\n\n' + steps;
+  if (navigator.share) {
+    navigator.share({ title: 'JB ONT: ' + title, text }).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓ Copied';
+      setTimeout(() => btn.textContent = '📤', 2000);
+    }).catch(() => {});
+  }
+}
+</script>
+<script>
+// ═══════════════════════════════════════
+// AI SYSTEM PROMPT
+// ═══════════════════════════════════════
+const AI_SYSTEM = `You are an expert KCOM Lightstream fibre network engineer assistant. You specialise in DZS (formerly Dasan Zhone) GPON ONT fault diagnosis and the ZMS (Zhone Management System) network management platform.
+
+NETWORK CONTEXT:
+- KCOM deploys DZS PON infrastructure across East Yorkshire and North Lincolnshire (Lightstream full-fibre network)
+- Equipment: DZS MXK OLTs, DZS zNID GPON ONT series (2424A1, 2426A1, 2428A1, 2426B1, 2428B1, 2700 series)
+- Managed via ZMS web interface using OMCI/SNMP
+- GPON: downstream 1490nm, upstream 1310nm, max 2.488Gbps/1.244Gbps, up to 32 ONTs per PON port (KCOM standard)
+
+OPTICAL POWER THRESHOLDS (at ONT Rx):
+- IDEAL: -18 to -22 dBm
+- ACCEPTABLE: -22 to -26 dBm  
+- MARGINAL: -26 to -27 dBm
+- FAULT THRESHOLD: below -27 dBm
+- ONT Tx (upstream): normal range 0 to +5 dBm
+
+CRITICAL ALARM CODES:
+LOS=Loss of Signal whole PON port (all customers affected-escalate NOC), LOSi=Loss of Signal this ONT only, LOF/LOFi=Loss of Frame, SDi=Signal Degrade (marginal quality), SFi=Signal Fail, DGi=Dying Gasp (ONT lost power), SUFi=Start-Up Failure (ranging failed), DFi=Deactivate Failure, DOWi=Drift of Window (timing drift-check temperature first), LOAMi=Loss of PLOAM, LCDi=Loss of GEM Channel, BIP_THR_EXCEEDED=BIP errors over threshold, GPON_OLT_ROGUE_ONU=rogue ONT detected by OLT, GPON_ONU_LEVEL_ROGUE=this ONT is the rogue, SELF_TEST_FAIL=hardware fault, DGi=dying gasp power loss, BATTERY_ON=running on battery backup
+
+CONNECTOR TYPES - CRITICAL:
+- KCOM GPON uses SC/APC ONLY (GREEN connectors, 8° angled end face)
+- NEVER mix with SC/UPC (BLUE, flat) - causes 3-8 dB silent loss
+- Dirty connector: 1-10+ dB loss. Clean before every connection.
+- APC/UPC mismatch looks like fibre fault but cleaning does nothing
+
+ZMS KEY NAVIGATION:
+- Find ONT: Network → Devices → Search by serial number
+- Optical stats: [ONT] → Statistics → Optical (Rx Power, Tx Power, Temperature)
+- BIP errors: [ONT] → Statistics → GTC/OMCI
+- Alarm history: Alarms → History → filter by serial + date range
+- Provision ONT: OLT → PON Port → DISCOVERED ONT → Apply Template → Synchronize
+- Remote reboot: [ONT] → Actions → Reboot ONT
+- Firmware upgrade: [ONT] → Actions → Upgrade Firmware
+- Performance history: [ONT] → Performance → Optical Rx History
+
+ROGUE ONT - CRITICAL KNOWLEDGE:
+- GPON uses TDMA upstream - each ONT gets a precise time slot
+- A rogue ONT transmits outside its slot, colliding with neighbours
+- ALL customers on that PON port drop simultaneously
+- FIRST ACTION: disconnect the rogue ONT's SC/APC fibre immediately
+- Find culprit: ZMS alarm history → ONT with DOWi events before mass LOSi = likely culprit
+- Remote deactivation: ZMS → suspect ONT → Actions → Disable ONT → watch if rogue alarm clears
+
+COMMON FAULT PATTERNS:
+1. Multiple customers down simultaneously → network fault/rogue ONT → escalate NOC, do NOT work at premises
+2. DGi alarm but customer says no power cut → failing PSU adapter (swap first)
+3. BIP errors rising but Rx power acceptable → dirty connector (clean before anything else)
+4. DOWi alarm → check temperature first (overheating = timing drift)
+5. SUFI alarm + optical power OK → check serial number mismatch character by character
+6. Intermittent drops in wet weather → water ingress at CTU connector
+7. PON green + no internet → provisioning fault (check ZMS services tab)
+8. Slow speeds but optical OK → check bandwidth profile CIR/PIR matches package
+9. ALARM LED flashing red → rogue ONT self-detected → disconnect fibre immediately
+10. APC/UPC mismatch → Rx power 3-8 dBm lower than neighbours, BIP errors elevated
+
+RESPONSE STYLE:
+- You are talking to field engineers on mobile phones - BE CONCISE
+- Lead with the most likely diagnosis
+- Give specific ZMS paths when relevant (e.g. ZMS → ONT → Statistics → Optical)
+- Use ✓ for good/normal, ⚠️ for marginal/warning, 🔴 for critical/fault
+- Number your action steps clearly
+- Bold the most important words or values
+- ALWAYS mention laser safety when discussing optical connectors (never look into fibre ports)
+- If asking follow-up questions, ask ONE specific question at a time
+- For optical readings, always compare to the threshold values above`;
+
+// ═══════════════════════════════════════
+// AI STATE
+// ═══════════════════════════════════════
+let aiHistory = [];
+let aiMode = 'chat';
+let aiThinking = false;
+
+// ═══════════════════════════════════════
+// API CALL
+// ═══════════════════════════════════════
+async function callAI(messages, maxTokens = 600) {
+  const fullMessages = [
+    { role: 'system', content: AI_SYSTEM },
+    ...messages
+  ];
+  let resp;
+  try {
+    resp = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer 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',
+        'X-Title': 'JB ONT Engineer Trainer'
+      },
+      body: JSON.stringify({
+        model: 'anthropic/claude-sonnet-4-5',
+        max_tokens: maxTokens,
+        messages: fullMessages
+      })
+    });
+  } catch (networkErr) {
+    // TypeError: Failed to fetch = CORS block, sandbox, or no internet
+    const isSandbox = window.self !== window.top;
+    const isLocalFile = location.protocol === 'file:';
+    if (isSandbox) {
+      throw new Error('SANDBOX');
+    } else if (isLocalFile) {
+      throw new Error('LOCALFILE');
+    } else if (!navigator.onLine) {
+      throw new Error('OFFLINE');
+    } else {
+      throw new Error('CORS: ' + (networkErr.message || 'Failed to fetch'));
+    }
+  }
+  if (!resp.ok) {
+    let body = '';
+    try { body = await resp.text(); } catch(e) {}
+    throw new Error('HTTP' + resp.status + ': ' + body.substring(0, 200));
+  }
+  const data = await resp.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+// ═══════════════════════════════════════
+// CHAT ENGINE
+// ═══════════════════════════════════════
+function setAiStatus(status) {
+  const el = document.getElementById('aiStatus');
+  if (!el) return;
+  if (status === 'thinking') {
+    el.className = 'ai-status thinking';
+    el.innerHTML = '<div class="ai-status-dot"></div><span>Thinking...</span>';
+  } else {
+    el.className = 'ai-status';
+    el.innerHTML = '<div class="ai-status-dot"></div><span>Ready</span>';
+  }
+}
+
+function appendMessage(role, html, isHtml = false) {
+  const msgs = document.getElementById('aiMessages');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  const avatar = role === 'ai' ? '🤖' : '👷';
+  const bubble = isHtml ? html : escapeAndFormat(html);
+  div.innerHTML = `
+    <div class="msg-avatar">${avatar}</div>
+    <div class="msg-bubble">${bubble}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('aiMessages');
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  div.id = 'typingIndicator';
+  div.innerHTML = `<div class="msg-avatar">🤖</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typingIndicator');
+  if (t) t.remove();
+}
+
+function escapeAndFormat(text) {
+  // Convert markdown-ish formatting to HTML
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/`([^`]+)`/g,'<code class="ai-code">$1</code>')
+    .replace(/⚠️([^\n]+)/g,'⚠️<span class="ai-warn">$1</span>')
+    .replace(/🔴([^\n]+)/g,'🔴<span class="ai-danger">$1</span>')
+    .replace(/✓([^\n]+)/g,'✓<span class="ai-ok">$1</span>')
+    .replace(/^(\d+)\.\s+(.+)$/gm,'<div class="ai-step"><div class="ai-step-num">$1</div><div>$2</div></div>')
+    .replace(/\n{2,}/g,'</p><p>')
+    .replace(/\n/g,'<br>');
+}
+
+async function sendAiMessage() {
+  const input = document.getElementById('aiInput');
+  const text = input.value.trim();
+  if (!text || aiThinking) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('quickPrompts').style.display = 'none';
+  aiThinking = true;
+  document.getElementById('aiSendBtn').disabled = true;
+  setAiStatus('thinking');
+
+  appendMessage('user', text);
+  aiHistory.push({ role: 'user', content: text });
+
+  showTyping();
+  try {
+    const reply = await callAI(aiHistory);
+    removeTyping();
+    appendMessage('ai', reply);
+    aiHistory.push({ role: 'assistant', content: reply });
+    if (window.haptic) haptic('light');
+  } catch (err) {
+    removeTyping();
+    const errMsg = err.message || '';
+    let hint, detail;
+    if (errMsg === 'SANDBOX') {
+      hint = '⚠️ AI features cannot run inside the Claude preview window.';
+      detail = 'This is a browser sandbox restriction, not a fault with your API key. To use AI features: <br><br><strong>1.</strong> Download the HTML file<br><strong>2.</strong> Go to <strong>netlify.com</strong><br><strong>3.</strong> Drag and drop the file<br><strong>4.</strong> Open the Netlify URL on your phone<br><br>Once hosted on Netlify, all AI features will work fully.';
+    } else if (errMsg === 'LOCALFILE') {
+      hint = '⚠️ AI features cannot run from a local file.';
+      detail = 'Your browser blocks API calls from <code>file://</code> URLs. Host the file on Netlify (free) and open it there.';
+    } else if (errMsg === 'OFFLINE') {
+      hint = '⚠️ No internet connection detected.';
+      detail = 'Check your Wi-Fi or mobile data and try again.';
+    } else if (errMsg.startsWith('CORS')) {
+      hint = '⚠️ API request was blocked (CORS error).';
+      detail = 'This usually means the file needs to be hosted on a proper web server. Try hosting on Netlify — it's free and takes 2 minutes.';
+    } else if (errMsg.includes('HTTP401')) {
+      hint = '⚠️ API key rejected (401).';
+      detail = 'The OpenRouter key is invalid or has been revoked. Log in at openrouter.ai → Keys and generate a new key.';
+    } else if (errMsg.includes('HTTP402')) {
+      hint = '⚠️ OpenRouter account has no credits (402).';
+      detail = 'Top up your balance at openrouter.ai/credits. Claude Sonnet 4.5 costs approximately $0.003 per message.';
+    } else if (errMsg.includes('HTTP429')) {
+      hint = '⚠️ Rate limit reached (429).';
+      detail = 'Wait 30 seconds and try again. If this keeps happening, your OpenRouter tier may need upgrading.';
+    } else if (errMsg.includes('HTTP404')) {
+      hint = '⚠️ Model not found (404).';
+      detail = 'The model <code>anthropic/claude-sonnet-4-5</code> may not be available on your OpenRouter plan. Check openrouter.ai/models.';
+    } else {
+      hint = '⚠️ Connection failed.';
+      detail = 'Error: ' + errMsg + '<br><br>Make sure the file is hosted on Netlify (not opened locally), your internet is working, and your OpenRouter key has credits.';
+    }
+    appendMessage('ai', '<strong>' + hint + '</strong><br><br>' + detail, true);
+  }
+
+  aiThinking = false;
+  document.getElementById('aiSendBtn').disabled = false;
+  setAiStatus('ready');
+}
+
+function aiKeyDown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendAiMessage();
+  }
+}
+
+function autoResize(el) {
+  // DO NOT use el.style.height = 'auto' — that triggers a layout reflow
+  // which resets the cursor to position 0 on mobile keyboards (IME).
+  // Instead: count newlines and grow the rows attribute only.
+  // Changing .rows is a DOM property change, not a CSS layout change —
+  // it never resets the cursor position.
+  const minRows = el.id === 'scenarioInput' ? 2 : 1;
+  const maxRows = 5;
+  const lines = (el.value.match(/\n/g) || []).length + 1;
+  el.rows = Math.min(maxRows, Math.max(minRows, lines));
+}
+
+function clearAiChat() {
+  aiHistory = [];
+  document.getElementById('aiMessages').innerHTML = '';
+  document.getElementById('quickPrompts').style.display = 'flex';
+  showWelcomeMessage();
+}
+
+function showWelcomeMessage() {
+  const msgs = document.getElementById('aiMessages');
+  msgs.innerHTML = '';
+  
+  // Detect environment and show appropriate status
+  const isSandbox   = window.self !== window.top;
+  const isLocalFile = location.protocol === 'file:';
+  const isHosted    = location.protocol === 'https:' || location.protocol === 'http:';
+  
+  if (isSandbox || isLocalFile) {
+    // Show hosting required notice
+    const warn = document.createElement('div');
+    warn.style.cssText = 'background:rgba(255,184,0,0.12);border:1.5px solid var(--warn);border-radius:10px;padding:14px 16px;margin-bottom:12px;font-size:13px;line-height:1.6;';
+    warn.innerHTML = '<strong style="color:var(--warn);display:block;margin-bottom:6px;">⚠️ Hosting Required for AI Features</strong>'
+      + 'The AI chat won't work here because browsers block API calls from '
+      + (isSandbox ? 'preview iframes' : 'local files') + '.<br><br>'
+      + '<strong>To use AI features — 3 steps:</strong><br>'
+      + '1. Download <code>kcom-ont-final.html</code><br>'
+      + '2. Go to <strong>netlify.com</strong> → drag and drop the file<br>'
+      + '3. Open the Netlify URL on your phone or PC<br><br>'
+      + '<span style="color:var(--accent3)">✓ Fault Finder, Modules, Alarms and Checklist all work here without hosting.</span>';
+    msgs.appendChild(warn);
+  }
+
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  div.innerHTML = '<div class="msg-avatar">🤖</div>'
+    + '<div class="msg-bubble">'
+    + '<strong>Hi, I'm your JB ONT Assistant.</strong><br><br>'
+    + 'I know everything about DZS GPON faults, ZMS diagnostics, optical power levels, alarm codes, and the Lightstream network.<br><br>'
+    + (isHosted
+        ? 'Describe what you're seeing and I'll help you diagnose it fast. Or tap one of the quick actions below. 👇'
+        : '<span style="color:var(--text-dim)">Once hosted on Netlify, I'll be fully available. The rest of the app (Fault Finder, Modules, Alarms, Checklist) works now.</span>')
+    + '</div>';
+  msgs.appendChild(div);
+  
+  // Add test connection button when hosted
+  if (isHosted) {
+    const testBtn = document.createElement('div');
+    testBtn.style.cssText = 'text-align:center;margin-top:8px;';
+    testBtn.innerHTML = '<button onclick="testApiConnection()" style="background:transparent;border:1px solid var(--border);color:var(--text-dim);font-size:12px;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;">🔌 Test API Connection</button>';
+    msgs.appendChild(testBtn);
+  }
+}
+
+async function testApiConnection() {
+  const msgs = document.getElementById('aiMessages');
+  const testDiv = document.createElement('div');
+  testDiv.className = 'msg ai';
+  testDiv.innerHTML = '<div class="msg-avatar">🤖</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  msgs.appendChild(testDiv);
+  msgs.scrollTop = msgs.scrollHeight;
+  
+  try {
+    const reply = await callAI([{ role: 'user', content: 'Reply with exactly: "API connection successful. Ready to help KCOM engineers."' }], 30);
+    testDiv.innerHTML = '<div class="msg-avatar">🤖</div><div class="msg-bubble" style="border-color:var(--accent3)"><span style="color:var(--accent3)">✅ ' + reply + '</span></div>';
+  } catch(err) {
+    const msg = err.message || '';
+    const reason = msg === 'SANDBOX' ? 'Running in sandbox — host on Netlify first.'
+      : msg === 'OFFLINE' ? 'No internet connection.'
+      : msg.includes('HTTP401') ? 'API key rejected (401) — check key at openrouter.ai.'
+      : msg.includes('HTTP402') ? 'No credits (402) — top up at openrouter.ai/credits.'
+      : msg.includes('HTTP404') ? 'Model not found (404) — check openrouter.ai/models.'
+      : msg;
+    testDiv.innerHTML = '<div class="msg-avatar">🤖</div><div class="msg-bubble" style="border-color:var(--danger)"><span style="color:var(--danger)">✗ Test failed: ' + reason + '</span></div>';
+  }
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+const quickPromptTexts = {
+  diagnose: "I'm on site with a fault. Help me diagnose it. The customer has no internet.",
+  explain: "Can you explain what the DOWi alarm means and what usually causes it?",
+  zms: "How do I check optical Rx power and BIP errors for an ONT in ZMS?",
+  optical: "What optical power readings should I be looking for and what do they mean?",
+  rogue: "I think there might be a rogue ONT on the PON port. How do I find which one it is?"
+};
+
+function sendQuickPrompt(key) {
+  const text = quickPromptTexts[key];
+  if (text) {
+    document.getElementById('aiInput').value = text;
+    sendAiMessage();
+  }
+}
+
+// ═══════════════════════════════════════
+// READINGS ANALYSER
+// ═══════════════════════════════════════
+async function analyseReadings() {
+  const rx = document.getElementById('r-rx').value;
+  const tx = document.getElementById('r-tx').value;
+  const bipu = document.getElementById('r-bipu').value;
+  const bipd = document.getElementById('r-bipd').value;
+  const temp = document.getElementById('r-temp').value;
+  const alarm = document.getElementById('r-alarm').value;
+
+  if (!rx && !tx && !bipu && !bipd) {
+    document.getElementById('readingsResult').innerHTML = '<div class="alert alert-warn"><strong>⚠️ Enter readings</strong>Please enter at least the Rx power reading from ZMS.</div>';
+    return;
+  }
+
+  const prompt = `Analyse these ZMS readings for a DZS GPON ONT on the KCOM Lightstream network:
+${rx ? `Rx Power: ${rx} dBm` : ''}
+${tx ? `Tx Power: ${tx} dBm` : ''}
+${bipu ? `BIP Upstream errors: ${bipu}` : ''}
+${bipd ? `BIP Downstream errors: ${bipd}` : ''}
+${temp ? `ONT Temperature: ${temp}°C` : ''}
+${alarm ? `Active ZMS alarm: ${alarm}` : ''}
+
+Interpret each reading, say whether it is good/marginal/fault, identify the most likely issue, and give me 3 specific actions to take.`;
+
+  const resultDiv = document.getElementById('readingsResult');
+  resultDiv.innerHTML = '<div class="msg ai" style="margin:0"><div class="msg-avatar">🤖</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>';
+
+  try {
+    const reply = await callAI([{ role: 'user', content: prompt }], 500);
+    resultDiv.innerHTML = `<div class="msg ai" style="margin:0;margin-top:4px"><div class="msg-avatar">🤖</div><div class="msg-bubble">${escapeAndFormat(reply)}</div></div>`;
+  } catch (err) {
+    const m = err.message || '';
+    const msg = m === 'SANDBOX' ? 'AI features require hosting on Netlify — see the AI Chat tab for instructions.'
+      : m === 'OFFLINE' ? 'No internet connection.'
+      : m.includes('HTTP401') ? 'API key rejected. Check your key at openrouter.ai.'
+      : m.includes('HTTP402') ? 'No OpenRouter credits. Top up at openrouter.ai/credits.'
+      : 'Connection failed: ' + m;
+    resultDiv.innerHTML = '<div class="alert alert-danger"><strong>Could not connect</strong>' + msg + '</div>';
+  }
+}
+
+// ═══════════════════════════════════════
+// SCENARIO TRAINER
+// ═══════════════════════════════════════
+let scenarioActive = false;
+let scenarioHistory = [];
+
+async function generateScenario(type) {
+  const content = document.getElementById('scenarioContent');
+  content.innerHTML = '<div style="text-align:center;padding:24px"><div class="typing-indicator" style="display:inline-flex"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div><p style="color:var(--text-dim);font-size:13px;margin-top:12px">Generating scenario...</p></div>';
+
+  const typeDesc = {
+    random: 'any realistic fault type from the KCOM network',
+    los: 'Loss of Signal (LOS/LOSi) fault',
+    rogue: 'rogue ONT causing upstream interference',
+    intermittent: 'intermittent drops fault',
+    noservice: 'PON registered but no internet service'
+  }[type] || 'random fault';
+
+  const prompt = `Generate a realistic KCOM Lightstream engineer training scenario for a ${typeDesc}.
+
+Format exactly like this:
+SCENARIO TITLE: [short title]
+CUSTOMER: [name, address in East Yorkshire or North Lincolnshire]
+FAULT REPORTED: [what customer said]
+ZMS STATUS: [what engineer sees in ZMS - include alarm codes, Rx power, ONT status]
+ON ARRIVAL: [what the engineer physically sees - LED states, any obvious signs]
+EXTRA INFO: [one piece of additional relevant info that might help or mislead]
+
+Then on a new line write:
+---
+DIAGNOSIS QUESTION: What is the most likely fault and what is your FIRST action?`;
+
+  try {
+    const reply = await callAI([{ role: 'user', content: prompt }], 400);
+    scenarioHistory = [];
+    scenarioActive = true;
+    renderScenario(reply, type);
+  } catch (err) {
+    const m = err.message || '';
+    const msg = m === 'SANDBOX'   ? 'AI features require hosting on Netlify. See the AI Chat tab for setup instructions.'
+      : m === 'LOCALFILE'         ? 'AI features cannot run from a local file. Host on Netlify first.'
+      : m === 'OFFLINE'           ? 'No internet connection detected.'
+      : m.includes('HTTP401')     ? 'API key rejected (401). Check your key at openrouter.ai.'
+      : m.includes('HTTP402')     ? 'No OpenRouter credits (402). Top up at openrouter.ai/credits.'
+      : m.includes('HTTP429')     ? 'Rate limit hit (429). Wait 30 seconds and try again.'
+      : m.includes('HTTP404')     ? 'Model not found (404). Check openrouter.ai/models.'
+      : 'Connection failed: ' + m;
+    content.innerHTML = '<div class="alert alert-danger"><strong>Could not generate scenario</strong>' + msg + '</div>'
+      + '<button class="res-btn res-btn-sec" style="width:100%;margin-top:8px" onclick="resetScenario()">← Try Again</button>';
+  }
+}
+
+function renderScenario(text, type) {
+  const content = document.getElementById('scenarioContent');
+  const parts = text.split('---');
+  const scenarioPart = parts[0].trim();
+  const question = parts[1] ? parts[1].replace('DIAGNOSIS QUESTION:', '').trim() : 'What is the most likely fault and what is your first action?';
+
+  const lines = scenarioPart.split('\n').filter(l=>l.trim()).map(l => {
+    const colonIdx = l.indexOf(':');
+    if (colonIdx > 0) {
+      const label = l.substring(0, colonIdx).trim();
+      const value = l.substring(colonIdx + 1).trim();
+      return `<tr><td style="color:var(--accent);font-weight:700;font-size:11px;padding:8px 12px;white-space:nowrap;vertical-align:top;border-top:1px solid var(--border)">${label}</td><td style="padding:8px 12px;font-size:13px;color:var(--text-mid);border-top:1px solid var(--border)">${value}</td></tr>`;
+    }
+    return '';
+  }).join('');
+
+  content.innerHTML = `
+    <div class="scenario-card">
+      <div class="scenario-header">
+        <div style="font-size:22px">🎯</div>
+        <div class="scenario-title">Training Scenario</div>
+        <span class="sug-badge b-maj">LIVE</span>
+      </div>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse">${lines}</table></div>
+    </div>
+    <div class="tip-card tc-blue" style="margin-bottom:12px">
+      <div class="tip-hdr">❓ Your Challenge <span class="tip-arrow">▼</span></div>
+      <div class="tip-body">${question}</div>
+    </div>
+    <div id="scenarioChat" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px"></div>
+    <div style="display:flex;gap:8px;align-items:flex-end;">
+      <textarea class="ai-textarea" id="scenarioInput" placeholder="Type your diagnosis and first action..." rows="2" autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="true" onkeydown="scenarioKeyDown(event)" oninput="autoResize(this)"></textarea>
+      <button class="ai-send-btn" onclick="submitScenarioAnswer()">➤</button>
+    </div>
+    <button class="res-btn res-btn-sec" style="width:100%;margin-top:10px" onclick="resetScenario()">↺ New Scenario</button>
+  `;
+
+  // Open the challenge tip
+  const tipCard = content.querySelector('.tip-card');
+  if (tipCard) tipCard.classList.add('open');
+  scenarioHistory = [{ role: 'user', content: `Here is the training scenario for the engineer:\n\n${scenarioPart}\n\nThe question is: ${question}` }];
+}
+
+async function submitScenarioAnswer() {
+  const input = document.getElementById('scenarioInput');
+  const answer = input.value.trim();
+  if (!answer) return;
+  input.value = '';
+
+  const chat = document.getElementById('scenarioChat');
+  const userDiv = document.createElement('div');
+  userDiv.className = 'msg user';
+  userDiv.innerHTML = `<div class="msg-avatar">👷</div><div class="msg-bubble">${escapeAndFormat(answer)}</div>`;
+  chat.appendChild(userDiv);
+  chat.scrollTop = chat.scrollHeight;
+
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'msg ai';
+  typingDiv.innerHTML = `<div class="msg-avatar">🤖</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  chat.appendChild(typingDiv);
+  chat.scrollTop = chat.scrollHeight;
+
+  scenarioHistory.push({ role: 'assistant', content: 'I presented the scenario and asked for the diagnosis.' });
+  scenarioHistory.push({ role: 'user', content: `Engineer's answer: ${answer}\n\nAs a trainer: (1) Was this correct? (2) What was the ideal first action? (3) One key learning point. Be encouraging but honest. Keep it under 120 words.` });
+
+  try {
+    const reply = await callAI(scenarioHistory, 300);
+    typingDiv.remove();
+    const aiDiv = document.createElement('div');
+    aiDiv.className = 'msg ai';
+    aiDiv.innerHTML = `<div class="msg-avatar">🤖</div><div class="msg-bubble">${escapeAndFormat(reply)}</div>`;
+    chat.appendChild(aiDiv);
+    chat.scrollTop = chat.scrollHeight;
+    scenarioHistory.push({ role: 'assistant', content: reply });
+    if (window.haptic) haptic('success');
+  } catch (err) {
+    typingDiv.remove();
+  }
+}
+
+function scenarioKeyDown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitScenarioAnswer(); }
+}
+
+function resetScenario() {
+  scenarioActive = false;
+  scenarioHistory = [];
+  document.getElementById('scenarioContent').innerHTML = `
+    <div style="text-align:center;padding:20px 0;">
+      <div style="font-size:48px;margin-bottom:12px;">🎯</div>
+      <p style="color:var(--text-dim);font-size:13px;margin-bottom:16px;">Choose a scenario type to begin</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="res-btn res-btn-primary" onclick="generateScenario('random')">🎲 Random Fault Scenario</button>
+        <button class="res-btn res-btn-sec" onclick="generateScenario('los')">🔴 No Signal (LOS) Scenario</button>
+        <button class="res-btn res-btn-sec" onclick="generateScenario('rogue')">🚨 Rogue ONT Scenario</button>
+        <button class="res-btn res-btn-sec" onclick="generateScenario('intermittent')">🟡 Intermittent Fault Scenario</button>
+        <button class="res-btn res-btn-sec" onclick="generateScenario('noservice')">📵 No Service Scenario</button>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════
+// MODE SWITCHING
+// ═══════════════════════════════════════
+function switchAiMode(mode, btn) {
+  aiMode = mode;
+  document.querySelectorAll('[id^="aiMode-"]').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('[id^="aiTab-"]').forEach(b => b.classList.remove('active'));
+  document.getElementById('aiMode-' + mode).style.display = 'flex';
+  if (mode !== 'chat') document.getElementById('aiMode-' + mode).style.display = 'block';
+  if (btn) btn.classList.add('active');
+  if (mode === 'chat' && document.getElementById('aiMessages').children.length === 0) {
+    showWelcomeMessage();
+  }
+}
+
+// ═══════════════════════════════════════
+// ASK AI ABOUT CURRENT RESOLUTION
+// ═══════════════════════════════════════
+
+function askAiAboutResolutionFromCard(btn) {
+  const card = btn.closest('.res-card');
+  if (!card) return;
+  const title = card.querySelector('.res-card-title') ? card.querySelector('.res-card-title').textContent : 'this fault';
+  const stepHeadings = [...card.querySelectorAll('.step-body h4')].map((h,i)=>(i+1)+'. '+h.textContent).join('\n');
+  askAiAboutResolution(title, stepHeadings);
+}
+function askAiAboutResolution(title, steps) {
+  showScreen('ai', null, 'nav-ai');
+  switchAiMode('chat', document.getElementById('aiTab-chat'));
+  const question = `I'm following the resolution guide for: "${title}". The steps are:\n${steps}\n\nCan you give me any additional tips or warn me about anything I might encounter during this fix?`;
+  document.getElementById('aiInput').value = question;
+  setTimeout(() => sendAiMessage(), 300);
+}
+
+// ═══════════════════════════════════════
+// INIT AI ON SCREEN SHOW
+// ═══════════════════════════════════════
+window.addEventListener('DOMContentLoaded', function() {
+  const _showScreenForAI = window.showScreen;
+  window.showScreen = function(id, desktopEl, navId) {
+    _showScreenForAI(id, desktopEl, navId);
+    if (id === 'ai') {
+      const msgs = document.getElementById('aiMessages');
+      if (msgs && msgs.children.length === 0) showWelcomeMessage();
+    }
+  };
+});
+
+</script>
+
+</body>
+</html>
